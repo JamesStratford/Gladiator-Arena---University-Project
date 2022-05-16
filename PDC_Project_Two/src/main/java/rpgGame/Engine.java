@@ -1,6 +1,7 @@
 package rpgGame;
 
 import java.io.IOException;
+import rpgGame.GUI.MainGUI;
 
 
 /**
@@ -11,10 +12,13 @@ public class Engine
 {
     private static Engine _instance = null;
     private World world;
+    private MainGUI gui;
     
     public Engine() throws IOException
     {
         world = World.get();
+        gui = new MainGUI();
+        gui.setVisible(true);
     }
     
     /*
@@ -27,6 +31,11 @@ public class Engine
             _instance = new Engine();
         }
         return _instance;
+    }
+    
+    public MainGUI getGUI()
+    {
+        return this.gui;
     }
     
     /*

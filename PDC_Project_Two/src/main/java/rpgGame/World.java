@@ -64,6 +64,8 @@ public class World
      */
     public void mainMenu() throws IOException
     {
+        Engine.get().getGUI().mainMenu();
+        
         FileManager.get().initialiseItemData();
         System.out.println("==============================================================================");
         System.out.println("                              GLADIATOR GAME");
