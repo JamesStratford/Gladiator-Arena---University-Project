@@ -85,7 +85,10 @@ public class Arena
                         validInput = true;
                         break;
                 }
-            } catch (Exception e) { System.out.println("Invalid input DEBUG: queryBatlleOptions: " + e.toString()); }
+            } catch (Exception e) { 
+                System.out.println("Invalid input");
+                World.get().getScanner().nextLine();
+            }
         }
     }
     

@@ -185,7 +185,10 @@ public class Shop
             }
             else
                 validInput = true;
-        } catch (Exception e) { System.out.println("Invalid input"); }
+        } catch (Exception e) { 
+            System.out.println("Invalid input");
+            World.get().getScanner().nextLine();
+        }
     }
     
     /**
