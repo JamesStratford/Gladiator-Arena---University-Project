@@ -122,7 +122,7 @@ public class Arena
         while (player.getAlive() && enemy.getAlive())
         {
             System.out.println("\nPlayers turn...");
-            Thread.sleep(1500);
+            Thread.sleep(1000);
             System.out.println(player.toString() + " HP: " + player.getHealthPoints() + ". Fatigue: " + player.getFatiguePoints());
             System.out.println();
             queryBattleOptions();
@@ -130,7 +130,7 @@ public class Arena
             if (enemy.getAlive())
             {
                 System.out.println(enemy.toString() + "s turn...");
-                Thread.sleep(1500);
+                Thread.sleep(1000);
                 System.out.println(enemy.toString() + " HP: " + enemy.getHealthPoints() + ". Fatigue: " + enemy.getFatiguePoints());
                 enemyTurn();
             }

@@ -189,6 +189,51 @@ public class MainGUI extends javax.swing.JFrame
         jButtonOptionSix.setVisible(false);
     }
     
+    public void shop()
+    {
+        jTextArea.setText("");
+        jButtonOptionOne.setVisible(true);
+        jButtonOptionOne.setText("<html>Buy<html>");
+
+        jButtonOptionTwo.setVisible(true);
+        jButtonOptionTwo.setText("<html>Sell<html>");
+
+        jButtonOptionThree.setVisible(true);
+        jButtonOptionThree.setText("<html>Back<html>");
+
+        jButtonOptionFour.setVisible(false);
+        jButtonOptionFive.setVisible(false);
+        jButtonOptionSix.setVisible(false);
+    }
+    
+    public void shopBuy()
+    {
+        jButtonOptionOne.setVisible(true);
+        jButtonOptionOne.setText("<html>Buy an item:<html>");
+
+        jButtonOptionTwo.setVisible(true);
+        jButtonOptionTwo.setText("<html>Cancel<html>");
+
+        jButtonOptionThree.setVisible(false);
+        jButtonOptionFour.setVisible(false);
+        jButtonOptionFive.setVisible(false);
+        jButtonOptionSix.setVisible(false);
+    }
+    
+    public void shopSell()
+    {
+        jButtonOptionOne.setVisible(true);
+        jButtonOptionOne.setText("<html>Sell an item:<html>");
+
+        jButtonOptionTwo.setVisible(true);
+        jButtonOptionTwo.setText("<html>Cancel<html>");
+
+        jButtonOptionThree.setVisible(false);
+        jButtonOptionFour.setVisible(false);
+        jButtonOptionFive.setVisible(false);
+        jButtonOptionSix.setVisible(false);
+    }
+    
     public String createPlayer()
     {
         String out = "";
@@ -197,6 +242,19 @@ public class MainGUI extends javax.swing.JFrame
         return out;
     }
     
+    public int integerQuery()
+    {
+        int ret = 0;
+
+        try
+        {
+            ret = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter a message"));
+        } catch (Exception e)
+        {
+//            System.out.println("Please enter an integer");
+        }
+        return ret;
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.

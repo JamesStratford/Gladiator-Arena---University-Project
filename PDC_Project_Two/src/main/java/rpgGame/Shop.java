@@ -2,6 +2,8 @@ package rpgGame;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import rpgGame.CombatObject.Player;
 import rpgGame.Items.Armour;
 import rpgGame.Items.Item;
@@ -137,10 +139,11 @@ public class Shop
         System.out.println("\"Welcome to Gondeliar\'s emporium!, for all your weapon and armour needs!\"");
         System.out.println("You have " + Player.get().getInventory().getCoins() + " coins.");
         
-        System.out.println("1. Buy");
-        System.out.println("2. Sell");
-        System.out.println("3. Back");
-        System.out.println("4. Save and quit");
+//        System.out.println("1. Buy");
+//        System.out.println("2. Sell");
+//        System.out.println("3. Back");
+//        System.out.println("4. Save and quit");
+        System.out.println("What would you like to do?");
     }
     
     /**
@@ -148,46 +151,107 @@ public class Shop
      */
     private void queryBuyPanel()
     {
+        Engine.get().getGUI().shopBuy();
         boolean validInput = false;
         while (!validInput)
-        try
         {
-            int input = World.get().getScanner().nextInt();
-           
-            if (input != 0)
+//            int input = World.get().getScanner().nextInt();
+            int input = -1;
+            if (!World.get().getButtonInputStream().isEmpty())
             {
-                Iterator<Item> it = availableItems.iterator();
-
-                Item theItem = null;
-
-                for (int i = 0; i < input; i++)
-                {
-                    theItem = it.next();
-                }
-
-                if (theItem != null)
-                {
-                    if (Player.get().getInventory().getCoins() >= theItem.getValue())
+                    switch (World.get().getButtonInputStream().read())
                     {
-                        if (Player.get().getInventory().getAvailableWeight() >= theItem.getWeight())
+                        case 1:
+                            // Buy an item:
+                            input = Engine.get().getGUI().integerQuery();
+                            switch (input)
+                            {
+                                case -1:
+                                    validInput = false;
+                                    break;
+                                case 0:
+                                    validInput = false;
+                                    break;
+                                default:
+                                    if (input <= this.availableItems.size() && input > 0)
+                                        validInput = true;
+                                    else
+                                    {
+                                        System.out.println("Please enter a corresponding number to the item.");
+                                        validInput = false;
+                                    }
+                                    break;
+                            }
+                            break;
+                        case 2:
+                            input = 0;
+                            validInput = true;
+                            break;
+                        default:
+                            validInput = false;
+                            break;
+                    }
+                if (input != 0 && validInput)
+                {
+                    Iterator<Item> it = availableItems.iterator();
+
+                    Item theItem = null;
+
+                    for (int i = 0; i < input; i++)
+                    {
+                        theItem = it.next();
+                    }
+
+                    if (theItem != null)
+                    {
+                        if (Player.get().getInventory().getCoins() >= theItem.getValue())
                         {
-                            playerBuyItem(theItem);
-                            System.out.println("Successfully bought " + theItem.getName());
-                            System.out.println();
+                            if (Player.get().getInventory().getAvailableWeight() >= theItem.getWeight())
+                            {
+                                playerBuyItem(theItem);
+                                System.out.println("Successfully bought " + theItem.getName());
+                                try
+                                {
+                                    Thread.sleep(500);
+                                } catch (InterruptedException ex)
+                                {
+                                    Logger.getLogger(Shop.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                            else
+                            {
+                                System.out.println("Item is too heavy. Sell something first!");
+                                try
+                                {
+                                    Thread.sleep(500);
+                                } catch (InterruptedException ex)
+                                {
+                                    Logger.getLogger(Shop.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
                         }
                         else
-                            System.out.println("Item is too heavy. Sell something first!");
+                        {
+                            System.out.println("You do not have enough coins!");
+                            try
+                            {
+                                Thread.sleep(500);
+                            } catch (InterruptedException ex)
+                            {
+                                Logger.getLogger(Shop.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
                     }
-                    else
-                        System.out.println("You do not have enough coins!");
-                    validInput = true;
                 }
             }
-            else
-                validInput = true;
-        } catch (Exception e) { 
-            System.out.println("Invalid input");
-            World.get().getScanner().nextLine();
+
+            try
+            {
+                Thread.sleep(50);
+            } catch (InterruptedException ex)
+            {
+                Logger.getLogger(Shop.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -196,35 +260,69 @@ public class Shop
      */
     private void querySellPanel()
     {
+        Engine.get().getGUI().shopSell();
         boolean validInput = false;
         while (!validInput)
-        try
         {
-            int input = World.get().getScanner().nextInt();
-
-            if (input != 0)
-            {
-                Item theItem = null;
-                if (input <= Player.get().getInventory().getItems().size())
-                    theItem = Player.get().getInventory().getItems().get(input - 1);
-                else
-                    System.out.println("Invalid option");
-
-                if (theItem != null)
+            int input = -1;
+            if (!World.get().getButtonInputStream().isEmpty())
+            { 
+                switch (World.get().getButtonInputStream().read())
                 {
-                    playerSellItem(theItem);
-                    System.out.println("Successfully sold " + theItem.getName());
-                    System.out.println();
-
-                    validInput = true;
+                    case 1:
+                        // Sell an item:
+                        input = Engine.get().getGUI().integerQuery();
+                        switch (input)
+                        {
+                            case -1:
+                                validInput = false;
+                                break;
+                            case 0:
+                                validInput = false;
+                                break;
+                            default:
+                                if (input <= Player.get().getInventory().getItems().size() && input > 0)
+                                {
+                                    validInput = true;
+                                } else
+                                {
+                                    System.out.println("Please enter a corresponding number to the item.");
+                                    validInput = false;
+                                }
+                                break;
+                        }
+                        break;
+                    case 2:
+                        input = 0;
+                        validInput = true;
+                        break;
+                    default:
+                        validInput = false;
+                        break;
                 }
-            } else
-            {
-                validInput = true;
+                if (input != 0 && validInput)
+                {
+                    Item theItem = null;
+                    if (input <= Player.get().getInventory().getItems().size())
+                        theItem = Player.get().getInventory().getItems().get(input - 1);
+                    else
+                        System.out.println("Invalid option");
+
+                    if (theItem != null)
+                    {
+                        playerSellItem(theItem);
+                        System.out.println("Successfully sold " + theItem.getName());
+                        System.out.println();
+                    }
+                }
             }
-        } catch (Exception e)
-        {
-            System.out.println("Invalid input");
+            try
+            {
+                Thread.sleep(50);
+            } catch (InterruptedException ex)
+            {
+                Logger.getLogger(Shop.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -233,43 +331,47 @@ public class Shop
      */
     public void shopMain()
     {
+        Engine.get().getGUI().shop();
         printShopEntry();
         
         boolean validInput = false;
         while (!validInput)
-        try
-        {
-            int input = World.get().getScanner().nextInt();
-            
-            switch (input)
+        {   
+            if (!World.get().getButtonInputStream().isEmpty())
             {
-                case 1:
-                    //buy
-                    printAvailableItems();
-                    System.out.println("Enter '0' to cancel.");
-                    // query buy
-                    queryBuyPanel();
-                    validInput = true;
-                    break;
-                case 2:
-                    //sell
-                    printPlayerAvailableItems();
-                    // query sell
-                    System.out.println("Enter '0' to cancel.");
-                    querySellPanel();
-                    validInput = true;
-                    break;
-                case 3:
-                    validInput = true;
-                    break;
-                case 4:
-                    //save and quit
-                    Engine.get().shutdown();
-                    break;
-                default:
-                    System.out.println("Invalid selection, please try again.");
-                    break;
+                switch (World.get().getButtonInputStream().read())
+                {
+                    case 1:
+                        //buy
+                        printAvailableItems();
+                        //System.out.println("Enter '0' to cancel.");
+                        // query buy
+                        queryBuyPanel();
+                        validInput = true;
+                        break;
+                    case 2:
+                        //sell
+                        printPlayerAvailableItems();
+                        // query sell
+                        //System.out.println("Enter '0' to cancel.");
+                        if (Player.get().getInventory().getItems().size() > 0)
+                            querySellPanel();
+                        else
+                            System.out.println("You have no items to sell.");
+                        validInput = true;
+                        break;
+                    case 3:
+                        validInput = true;
+                        break;
+                }
             }
-        } catch (Exception e) { System.out.println("Invalid input"); }
+            try
+            {
+                Thread.sleep(50);
+            } catch (InterruptedException ex)
+            {
+                Logger.getLogger(Shop.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 }

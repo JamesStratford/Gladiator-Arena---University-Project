@@ -81,12 +81,13 @@ public class World
         
         FileManager.get().initialiseItemData();
         System.out.println("==============================================================================");
-        System.out.println("                              GLADIATOR GAME");
+        System.out.println("                                               GLADIATOR GAME");
         System.out.println("==============================================================================");
 
-        System.out.println("1. New game");
-        System.out.println("2. Load game");
-        System.out.println("3. Quit");
+//        System.out.println("1. New game");
+//        System.out.println("2. Load game");
+//        System.out.println("3. Quit");
+        System.out.println("Select an option at the bottom to begin.");
 
             boolean validInput = false;
             while (!validInput)
@@ -146,6 +147,13 @@ public class World
         System.out.println("You have awoken in a mysterious city and remember nothing of your past.\n"
                 + "Having no food and shelter, you decided to look for a job. Upon passing a sign, your attention is caught: \n\n\'The Arena! Battle opponents for coins!\'\n\n"
                 + "You decide to investigate...");
+        try
+        {
+            Thread.sleep(500);
+        } catch (InterruptedException ex)
+        {
+            Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -165,16 +173,24 @@ public class World
 
         while (!quitGame)
         {
+            try
+            {
+                Thread.sleep(500);
+            } catch (InterruptedException ex)
+            {
+                Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
+            }
             Engine.get().getGUI().townCenter();
             player = Player.get();
             if (player.getAlive())
             {
-                System.out.println(""
-                        + "1. Fight in the arena\n"
-                        + "2. Visit the shop\n"
-                        + "3. Manage inventory\n"
-                        + "4. View stats and assign skill points\n"
-                        + "5. Save and quit");
+//                System.out.println(""
+//                        + "1. Fight in the arena\n"
+//                        + "2. Visit the shop\n"
+//                        + "3. Manage inventory\n"
+//                        + "4. View stats and assign skill points\n"
+//                        + "5. Save and quit");
+                System.out.println("You are waiting in the town center, contemplating your next move.");
 
                 try
                 {

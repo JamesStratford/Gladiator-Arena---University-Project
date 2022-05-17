@@ -30,12 +30,12 @@ public class TextAreaOutputStream extends OutputStream
         text.append(String.valueOf((char)b));
         text.setCaretPosition(text.getDocument().getLength());
         text.update(text.getGraphics());
-        try
-        {
-            Thread.sleep(10);
-        } catch (InterruptedException ex)
-        {
-            Logger.getLogger(TextAreaOutputStream.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try
+//        {
+//            Thread.sleep(15);
+//        } catch (InterruptedException ex)
+//        {
+//            Logger.getLogger(TextAreaOutputStream.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 }
