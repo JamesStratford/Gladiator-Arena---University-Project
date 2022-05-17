@@ -1,4 +1,4 @@
-Sophia,4,150,800,10
-stats,25,5,5,5
-inventory,731,-1
+test,1,0,100,0
+stats,5,5,5,5
+inventory,0,-1
 -1,-1

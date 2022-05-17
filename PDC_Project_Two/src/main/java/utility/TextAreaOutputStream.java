@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rpgGame.GUI;
+package utility;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTextArea;
 
 /**
@@ -28,5 +30,12 @@ public class TextAreaOutputStream extends OutputStream
         text.append(String.valueOf((char)b));
         text.setCaretPosition(text.getDocument().getLength());
         text.update(text.getGraphics());
+        try
+        {
+            Thread.sleep(10);
+        } catch (InterruptedException ex)
+        {
+            Logger.getLogger(TextAreaOutputStream.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

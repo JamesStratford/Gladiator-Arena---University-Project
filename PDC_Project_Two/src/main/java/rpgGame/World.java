@@ -2,7 +2,10 @@ package rpgGame;
 
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import rpgGame.CombatObject.Player;
+import utility.ButtonInputQueue;
 
 /**
  *
@@ -23,6 +26,7 @@ public class World
         player = Player.get();
         arena = new Arena();
         scanner = new Scanner(System.in);
+
         newGame = true;
         quitGame = false;
     }
@@ -59,12 +63,21 @@ public class World
     }
     
     /**
+     * @param newGame the newGame to set
+     */
+    public void setNewGame(boolean newGame)
+    {
+        this.newGame = newGame;
+    }
+    
+    /**
      *  Main menu
      * @throws IOException
      */
     public void mainMenu() throws IOException
     {
         Engine.get().getGUI().mainMenu();
+        
         
         FileManager.get().initialiseItemData();
         System.out.println("==============================================================================");
@@ -75,49 +88,53 @@ public class World
         System.out.println("2. Load game");
         System.out.println("3. Quit");
 
-        try
-        {
             boolean validInput = false;
             while (!validInput)
             {
-                switch (getScanner().nextInt())
+                if (!getButtonInputStream().isEmpty())
                 {
-                    case 1:
-                        // player creation
-                        createPlayer();
-                        startGame();
-                        validInput = true;
-                        break;
-                    case 2:
-                        if(!FileManager.get().loadGame())
-                        {
-                            System.out.println("Creating a new game...");
+                    switch (getButtonInputStream().read())
+                    {
+                        case 1:
+                            // player creation
                             createPlayer();
                             startGame();
-                        }
-                        else
-                        {
-                            newGame = false;
-                            startGame();
-                        }
-                        validInput = true;
-                        break;
-                    case 3:
-                        quitGame = true;
-                        validInput = true;
-                        System.out.println("Quitting");
-                        System.exit(0);
-                        break;
-                    default:
-                        System.out.println("Invalid option");
-                        break;
+                            validInput = true;
+                            break;
+                        case 2:
+                            if(!FileManager.get().loadGame())
+                            {
+                                System.out.println("Creating a new game...");
+                                createPlayer();
+                                startGame();
+                            }
+                            else
+                            {
+                                newGame = false;
+                                startGame();
+                            }
+                            validInput = true;
+                            break;
+                        case 3:
+                            quitGame = true;
+                            validInput = true;
+                            System.out.println("Quitting");
+                            System.exit(0);
+                            break;
+                        default:
+                            System.out.println("Invalid option");
+                            break;
+                    }
+                }
+                try
+                {
+                    Thread.sleep(20);
+                } catch (InterruptedException ex)
+                {
+                    Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        } catch (Exception e)
-        {
-            System.out.println("Invalid input");
-            getScanner().next();
-        }
+
         quitGame = true;
     }
 
@@ -163,42 +180,45 @@ public class World
                     boolean validInput = false;
                     while (!validInput)
                     {
-                        switch (getScanner().nextInt())
+                        if (!getButtonInputStream().isEmpty())
                         {
-                            case 1:
-                                // enter arena
-                                arena.arenaMain();
-                                validInput = true;
-                                break;
-                            case 2:
-                                // enter shop
-                                shop.shopMain();
-                                validInput = true;
-                                break;
-                            case 3:
-                                // manage inventory
-                                Player.get().manageInventory();
-                                validInput = true;
-                                break;
-                            case 4:
-                                // view stats
-                                Player.get().manageStats();
-                                validInput = true;
-                                break;
-                            case 5:
-                                // save game and quit
-                                Engine.get().shutdown();
-                                validInput = true;
-                                break;
-                            default:
-                                System.out.println("Invalid option");
-                                break;
+                            switch (getButtonInputStream().read())
+                            {
+                                case 1:
+                                    // enter arena
+                                    arena.arenaMain();
+                                    validInput = true;
+                                    break;
+                                case 2:
+                                    // enter shop
+                                    shop.shopMain();
+                                    validInput = true;
+                                    break;
+                                case 3:
+                                    // manage inventory
+                                    Player.get().manageInventory();
+                                    validInput = true;
+                                    break;
+                                case 4:
+                                    // view stats
+                                    Player.get().manageStats();
+                                    validInput = true;
+                                    break;
+                                case 5:
+                                    // save game and quit
+                                    Engine.get().shutdown();
+                                    validInput = true;
+                                    break;
+                                default:
+                                    System.out.println("Invalid option");
+                                    break;
+                            }
                         }
+                        Thread.sleep(20);
                     }
                 } catch (Exception e)
                 {
                     System.out.println("Invalid input DEBUG: startGame: " + e.toString());
-                    getScanner().next();
                 }
             } else
             {
@@ -218,18 +238,22 @@ public class World
         return scanner;
     }
     
+    public ButtonInputQueue getButtonInputStream()
+    {
+        return Engine.get().getGUI().getButtonInputs();
+    }
+    
     public void createPlayer()
     {
-        String playerName;
-        System.out.println("What is your name? (A-z and one word only)");
-        
-        while (!getScanner().hasNext("[A-Za-z]+"))
+        String playerName = "";
+        while (playerName.equals(""))
         {
-            System.out.println("Please enter only letters!");
-            getScanner().next();
+            playerName = Engine.get().getGUI().createPlayer();
+            if (playerName.equals(""))
+            {
+                System.out.println("Please enter a name");
+            }
         }
-        playerName = getScanner().next();
-        getScanner().nextLine();
         
         Player.set(new Player(playerName, 5, 5, 5, 5));
     }

@@ -5,9 +5,20 @@
  */
 package rpgGame.GUI;
 
+import java.awt.Color;
+import utility.TextAreaOutputStream;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import rpgGame.Engine;
+import rpgGame.FileManager;
+import rpgGame.World;
+import utility.ButtonInputQueue;
 
 /**
  *
@@ -15,7 +26,8 @@ import java.io.PrintStream;
  */
 public class MainGUI extends javax.swing.JFrame
 {
-
+    private ButtonInputQueue buttonInputs;
+    
     /**
      * Creates new form mainGUI
      */
@@ -23,42 +35,132 @@ public class MainGUI extends javax.swing.JFrame
     {
         initComponents();       
         System.setOut(new PrintStream(new TextAreaOutputStream(jTextArea)));
-    }
-
-    public void mainMenu()
-    {
-        jButtonOptionOne.setVisible(true);
-        jButtonOptionOne.setText("New Game");
-        jButtonOptionOne.removeAll();
-        jButtonOptionOne.addActionListener(new ActionListener() {
+        
+        // Keeps output window from tearing and overlapping text
+        new Thread(new Runnable() {
+            @Override
+            public void run()
+            {
+                while (true)
+                {
+                    try
+                    {
+                        jTextArea.repaint();
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex)
+                    {
+                        Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }).start();
+        // ---------------------------------------------------------
+        
+        buttonInputs = new ButtonInputQueue();
+        
+        // Please open below code fold to see button action listener implementation.
+        // <editor-fold defaultstate="collapsed" desc="Button action listeners"> 
+        jButtonOptionOne.addActionListener(new ActionListener()
+        {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                // New game start
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }  
+                buttonInputs.addInput(1);
+            }
         });
         
-        jButtonOptionTwo.setVisible(true);
-        jButtonOptionTwo.setText("Load Game");
-        jButtonOptionTwo.removeAll();
         jButtonOptionTwo.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                // Load game start
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                buttonInputs.addInput(2);
             }
         });
+        
+        jButtonOptionThree.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                buttonInputs.addInput(3);
+            }
+        });
+        
+        jButtonOptionFour.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                buttonInputs.addInput(4);
+            }
+        });
+        
+        jButtonOptionFive.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                buttonInputs.addInput(5);
+            }
+        });
+        
+        jButtonOptionSix.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                buttonInputs.addInput(6);
+            }
+        });
+        
+        jButtonQuit.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                try
+                {
+                    Engine.get().shutdown();
+                } catch (IOException ex)
+                {
+                    Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        // </editor-fold>
+        
+        
+    }
+    
+    public ButtonInputQueue getButtonInputs()
+    {
+        return buttonInputs;
+    }
+
+    public void mainMenu()
+    {
+        jTextArea.setText("");
+        jButtonOptionOne.setVisible(true);
+        jButtonOptionOne.setText("New Game");
+        
+        jButtonOptionTwo.setVisible(true);
+        jButtonOptionTwo.setText("Load Game");
         
         jButtonOptionThree.setVisible(false);
         jButtonOptionFour.setVisible(false);
         jButtonOptionFive.setVisible(false);
         jButtonOptionSix.setVisible(false);
+        
     }
     
-    
+    public String createPlayer()
+    {
+        String out = "";
+        out += (String)JOptionPane.showInputDialog(this, "Enter a name");
+        
+        return out;
+    }
     
     
     /**
@@ -99,7 +201,7 @@ public class MainGUI extends javax.swing.JFrame
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 281, Short.MAX_VALUE)
+            .addGap(0, 217, Short.MAX_VALUE)
         );
 
         jButtonQuit.setText("Quit");
@@ -161,6 +263,7 @@ public class MainGUI extends javax.swing.JFrame
 
         jTextArea.setEditable(false);
         jTextArea.setColumns(20);
+        jTextArea.setLineWrap(true);
         jTextArea.setRows(5);
         jScrollPane1.setViewportView(jTextArea);
 
@@ -168,11 +271,13 @@ public class MainGUI extends javax.swing.JFrame
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(jScrollPane1)
+                .addGap(1, 1, 1))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -192,7 +297,7 @@ public class MainGUI extends javax.swing.JFrame
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)

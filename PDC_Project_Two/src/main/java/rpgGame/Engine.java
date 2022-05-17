@@ -14,7 +14,7 @@ public class Engine
     private World world;
     private MainGUI gui;
     
-    public Engine() throws IOException
+    public Engine()
     {
         world = World.get();
         gui = new MainGUI();
@@ -24,7 +24,7 @@ public class Engine
     /*
     *   @returns _instance
     */
-    public static Engine get() throws IOException
+    public static Engine get()
     {
         if (_instance == null)
         {
