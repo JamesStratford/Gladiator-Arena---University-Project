@@ -142,16 +142,51 @@ public class MainGUI extends javax.swing.JFrame
     {
         jTextArea.setText("");
         jButtonOptionOne.setVisible(true);
-        jButtonOptionOne.setText("New Game");
+        jButtonOptionOne.setText("<html>New Game<html>");
         
         jButtonOptionTwo.setVisible(true);
-        jButtonOptionTwo.setText("Load Game");
+        jButtonOptionTwo.setText("<html>Load Game<html>");
         
         jButtonOptionThree.setVisible(false);
         jButtonOptionFour.setVisible(false);
         jButtonOptionFive.setVisible(false);
         jButtonOptionSix.setVisible(false);
+    }
+    
+    public void townCenter()
+    {
+        jTextArea.setText("");
+        jButtonOptionOne.setVisible(true);
+        jButtonOptionOne.setText("<html>Enter arena<html>");
+
+        jButtonOptionTwo.setVisible(true);
+        jButtonOptionTwo.setText("<html>Enter shop<html>");
+
+        jButtonOptionThree.setVisible(true);
+        jButtonOptionThree.setText("<html>Manage inventory<html>");
         
+        jButtonOptionFour.setVisible(true);
+        jButtonOptionFour.setText("<html>Manage stats and assign skill points<html>");
+        
+        jButtonOptionFive.setVisible(false);
+        jButtonOptionSix.setVisible(false);
+    }
+    
+    public void arena()
+    {
+        jTextArea.setText("");
+        jButtonOptionOne.setVisible(true);
+        jButtonOptionOne.setText("<html>Attack!<html>");
+
+        jButtonOptionTwo.setVisible(true);
+        jButtonOptionTwo.setText("<html>Dodge!<html>");
+
+        jButtonOptionThree.setVisible(true);
+        jButtonOptionThree.setText("<html>Rest!<html>");
+
+        jButtonOptionFour.setVisible(false);
+        jButtonOptionFive.setVisible(false);
+        jButtonOptionSix.setVisible(false);
     }
     
     public String createPlayer()
@@ -204,62 +239,28 @@ public class MainGUI extends javax.swing.JFrame
             .addGap(0, 217, Short.MAX_VALUE)
         );
 
-        jButtonQuit.setText("Quit");
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jButtonQuit.setText("<html>Save and Quit<html>");
+        jPanel2.add(jButtonQuit, new org.netbeans.lib.awtextra.AbsoluteConstraints(796, 11, 114, 88));
 
         jButtonOptionThree.setText("Option 3");
+        jPanel2.add(jButtonOptionThree, new org.netbeans.lib.awtextra.AbsoluteConstraints(276, 11, 114, 88));
 
         jButtonOptionFour.setText("Option 4");
+        jPanel2.add(jButtonOptionFour, new org.netbeans.lib.awtextra.AbsoluteConstraints(408, 11, 114, 88));
 
         jButtonOptionFive.setText("Option 5");
+        jPanel2.add(jButtonOptionFive, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 11, 114, 88));
 
         jButtonOptionOne.setText("Option 1");
+        jPanel2.add(jButtonOptionOne, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 114, 88));
 
         jButtonOptionSix.setText("Option 6");
+        jPanel2.add(jButtonOptionSix, new org.netbeans.lib.awtextra.AbsoluteConstraints(664, 11, 114, 88));
 
         jButtonOptionTwo.setText("Option 2");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButtonOptionOne, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonOptionTwo, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonOptionThree, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonOptionFour, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonOptionFive, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonOptionSix, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(206, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                    .addContainerGap(796, Short.MAX_VALUE)
-                    .addComponent(jButtonQuit, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(20, 20, 20)))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonOptionThree, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-                    .addComponent(jButtonOptionFour, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-                    .addComponent(jButtonOptionFive, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-                    .addComponent(jButtonOptionSix, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-                    .addComponent(jButtonOptionOne, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-                    .addComponent(jButtonOptionTwo, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE))
-                .addContainerGap())
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jButtonQuit, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-                    .addContainerGap()))
-        );
+        jPanel2.add(jButtonOptionTwo, new org.netbeans.lib.awtextra.AbsoluteConstraints(144, 11, 114, 88));
 
         jTextArea.setEditable(false);
         jTextArea.setColumns(20);
@@ -277,7 +278,7 @@ public class MainGUI extends javax.swing.JFrame
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

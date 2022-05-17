@@ -165,6 +165,7 @@ public class World
 
         while (!quitGame)
         {
+            Engine.get().getGUI().townCenter();
             player = Player.get();
             if (player.getAlive())
             {

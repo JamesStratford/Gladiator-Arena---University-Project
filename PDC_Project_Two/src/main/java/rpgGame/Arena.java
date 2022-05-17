@@ -1,6 +1,8 @@
 package rpgGame;
 
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import rpgGame.CombatObject.Enemy;
 import rpgGame.CombatObject.Player;
 
@@ -19,6 +21,7 @@ public class Arena
      */
     public void arenaMain() throws InterruptedException
     {
+        Engine.get().getGUI().arena();
         enemy = Enemy.generateRandomEnemy();
         player = Player.get();
         printArenaWelcome();
@@ -58,14 +61,16 @@ public class Arena
     private void queryBattleOptions()
     {
         boolean validInput = false;
+//        System.out.println("1. Attack\n"
+//                + "2. Dodge\n"
+//                + "3. Rest\n"
+//                + "4. Save and quit");
         while (!validInput)
         {
-            System.out.println("1. Attack\n"
-                    + "2. Dodge\n"
-                    + "3. Rest\n"
-                    + "4. Save and quit");
-            try {
-                switch (World.get().getScanner().nextInt())
+            if (!World.get().getButtonInputStream().isEmpty())
+            {
+                System.out.println("woprking");
+                switch (World.get().getButtonInputStream().read())
                 {
                     case 1:
                         player.attack(enemy);
@@ -79,15 +84,14 @@ public class Arena
                         player.rest();
                         validInput = true;
                         break;
-                    case 4:
-                        System.out.println("Quitting");
-                        Engine.get().shutdown();
-                        validInput = true;
-                        break;
                 }
-            } catch (Exception e) { 
-                System.out.println("Invalid input");
-                World.get().getScanner().nextLine();
+            }
+            try
+            {
+                Thread.sleep(50);
+            } catch (InterruptedException ex)
+            {
+                Logger.getLogger(Arena.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
