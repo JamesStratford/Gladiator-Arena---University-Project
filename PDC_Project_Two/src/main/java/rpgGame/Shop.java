@@ -332,6 +332,7 @@ public class Shop
     public void shopMain()
     {
         Engine.get().getGUI().shop();
+        World.get().getButtonInputStream().clear();
         printShopEntry();
         
         boolean validInput = false;
@@ -364,6 +365,7 @@ public class Shop
                         validInput = true;
                         break;
                 }
+                World.get().getButtonInputStream().clear();
             }
             try
             {

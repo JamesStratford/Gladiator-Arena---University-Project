@@ -22,6 +22,7 @@ public class Arena
     public void arenaMain() throws InterruptedException
     {
         Engine.get().getGUI().arena();
+        World.get().getButtonInputStream().clear();
         enemy = Enemy.generateRandomEnemy();
         player = Player.get();
         printArenaWelcome();
@@ -60,11 +61,9 @@ public class Arena
      */
     private void queryBattleOptions()
     {
+        World.get().getButtonInputStream().clear();
         boolean validInput = false;
-//        System.out.println("1. Attack\n"
-//                + "2. Dodge\n"
-//                + "3. Rest\n"
-//                + "4. Save and quit");
+
         while (!validInput)
         {
             if (!World.get().getButtonInputStream().isEmpty())
@@ -120,17 +119,16 @@ public class Arena
     {
         while (player.getAlive() && enemy.getAlive())
         {
-            System.out.println("\nPlayers turn...");
-            Thread.sleep(1000);
+            System.out.println("\n\nPlayers turn...");
             System.out.println(player.toString() + " HP: " + player.getHealthPoints() + ". Fatigue: " + player.getFatiguePoints());
-            System.out.println();
+            Thread.sleep(500);
             queryBattleOptions();
             System.out.println();
             if (enemy.getAlive())
             {
-                System.out.println(enemy.toString() + "s turn...");
-                Thread.sleep(1000);
+                System.out.println("\n\n" + enemy.toString() + "s turn...");
                 System.out.println(enemy.toString() + " HP: " + enemy.getHealthPoints() + ". Fatigue: " + enemy.getFatiguePoints());
+                Thread.sleep(500);
                 enemyTurn();
             }
         }

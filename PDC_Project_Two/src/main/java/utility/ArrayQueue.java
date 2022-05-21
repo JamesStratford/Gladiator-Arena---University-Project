@@ -33,18 +33,18 @@ public class ArrayQueue<E> implements QueueADT<E>
         {
             queue[rear++] = (E) element;
         }
-        else if (front > 0)
+        else if (front >= 0)
         {
-            if (rear > front)
+            if (rear >= front)
                 rear = 0;
             else
                 rear++;
             queue[rear++] = (E) element;
         }
-        
-        if (rear + 1 == front || (rear == currentCapacity && front == 0))
+        else if (rear + 1 == front ^ (rear == currentCapacity && front == 0))
         {
             expandCapacity();
+            rear = 0;
             queue[rear++] = (E) element;
         }
     }
@@ -83,7 +83,7 @@ public class ArrayQueue<E> implements QueueADT<E>
     @Override
     public boolean isEmpty()
     {
-        return size == 0;
+        return this.size == 0;
     }
 
     @Override
@@ -94,8 +94,6 @@ public class ArrayQueue<E> implements QueueADT<E>
     
     public void expandCapacity()
     {
-//        if (queue[0] != null)
-//        {
             int newSize = queue.length * 2;
             E[] newArray = (E[])(new Object[newSize]);
             int k = front;
@@ -114,7 +112,6 @@ public class ArrayQueue<E> implements QueueADT<E>
 
             currentCapacity = newSize;
             queue = newArray;
-//        }
     }
     
     public static void main(String[] args)

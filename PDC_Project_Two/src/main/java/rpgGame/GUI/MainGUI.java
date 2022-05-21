@@ -264,6 +264,20 @@ public class MainGUI extends javax.swing.JFrame
         jButtonOptionSix.setVisible(false);
     }
     
+    public void manageInventory()
+    {
+        jButtonOptionOne.setVisible(true);
+        jButtonOptionOne.setText("<html>Equip/Dequip an item:<html>");
+
+        jButtonOptionTwo.setVisible(true);
+        jButtonOptionTwo.setText("<html>Cancel<html>");
+
+        jButtonOptionThree.setVisible(false);
+        jButtonOptionFour.setVisible(false);
+        jButtonOptionFive.setVisible(false);
+        jButtonOptionSix.setVisible(false);
+    }
+    
     public String createPlayer()
     {
         String out = "";

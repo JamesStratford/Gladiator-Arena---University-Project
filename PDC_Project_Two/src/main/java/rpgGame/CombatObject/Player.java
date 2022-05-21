@@ -27,8 +27,8 @@ public class Player extends CombatObject
     private LinkedHashSet<Enemy> defeatedEnemies;
 
     /**
-    *   New game player constructor
-    */
+     * New game player constructor
+     */
     public Player(String name, int strength, int dexterity, int vitality, int stamina)
     {
         super(strength, dexterity, vitality, stamina);
@@ -41,7 +41,8 @@ public class Player extends CombatObject
     }
 
     /**
-    *   Player constructor for loadGame
+     * Player constructor for loadGame
+     *
      * @param name
      * @param level
      * @param xp
@@ -55,9 +56,9 @@ public class Player extends CombatObject
      * @param inventory
      * @param equiptWeapon
      * @param equiptArmour
-    */
-    public Player(String name, int level, int xp, int xpToNextLevel, int availableSkillPoints, int strength, 
-            int dexterity, int vitality, int stamina, int coins, ArrayList<Integer> inventory, 
+     */
+    public Player(String name, int level, int xp, int xpToNextLevel, int availableSkillPoints, int strength,
+            int dexterity, int vitality, int stamina, int coins, ArrayList<Integer> inventory,
             int equiptWeapon, int equiptArmour)
     {
         super(strength, dexterity, vitality, stamina);
@@ -87,8 +88,8 @@ public class Player extends CombatObject
     }
 
     /**
-    *   @return _instance
-    */
+     * @return _instance
+     */
     public static Player get()
     {
         if (_instance == null)
@@ -99,59 +100,62 @@ public class Player extends CombatObject
     }
 
     /**
-    *   set instance to be a specific player object.Primarily used when loading a save file.
+     * set instance to be a specific player object.Primarily used when loading a
+     * save file.
+     *
      * @param player
-    */
+     */
     public static void set(Player player)
     {
         _instance = player;
     }
 
     /**
-    *   @return name
-    */
+     * @return name
+     */
     public String getName()
     {
         return name;
     }
 
     /**
-    *   @return XP
-    */
+     * @return XP
+     */
     public int getXp()
     {
         return xp;
     }
 
     /**
-    *   @return xpToNextLevel
-    */
+     * @return xpToNextLevel
+     */
     public int getXpToNextLevel()
     {
         return xpToNextLevel;
     }
 
     /**
-    *   @return level
-    */
+     * @return level
+     */
     public int getLevel()
     {
         return this.level;
     }
 
     /**
-    *   @return availableSkillPoints
-    */
+     * @return availableSkillPoints
+     */
     public int getAvailableSkillPoints()
     {
         return availableSkillPoints;
     }
-    
+
     /**
-    *   Adds xp to player character and levels player up if over the threshold, then doubles how much xp is
-    *   needed for the next level.
+     * Adds xp to player character and levels player up if over the threshold,
+     * then doubles how much xp is needed for the next level.
+     *
      * @param xp
-    */
+     */
     public void addXp(int xp)
     {
         this.xp += xp;
@@ -165,8 +169,8 @@ public class Player extends CombatObject
     }
 
     /**
-    *   levels the player character up and awards 10 skill points.
-    */
+     * levels the player character up and awards 10 skill points.
+     */
     public void levelUp()
     {
         level++;
@@ -176,8 +180,8 @@ public class Player extends CombatObject
     }
 
     /**
-    *   @return String name
-    */
+     * @return String name
+     */
     @Override
     public String toString()
     {
@@ -193,81 +197,127 @@ public class Player extends CombatObject
     }
 
     /**
-    *   manage player inventory, assign weapons and armour to be equipt.
-    */
+     * manage player inventory, assign weapons and armour to be equipt.
+     */
     public void manageInventory() throws IOException
     {
+        Engine.get().getGUI().manageInventory();
         viewInventory();
-        System.out.println("Enter the corresponding integer to equip / dequip the item OR enter '0' to go back.");
+        System.out.println("Enter the corresponding integer to equip / dequip the item.");
+        boolean validInput = false;
         boolean back = false;
         while (!back)
         {
-            try
-            {
-                int input = World.get().getScanner().nextInt();
+            int input = -1;
 
-                if (input == 0)
+            while (!validInput)
+            {
+                if (!World.get().getButtonInputStream().isEmpty())
                 {
-                    back = true;
-                } else if (input <= this.getInventory().getItems().size())
-                {
-                    if (this.inventory.getItems().get(input - 1).getClass() == Weapon.class)
+                    switch (World.get().getButtonInputStream().read())
                     {
-                        if (this.wieldedWeapon != null)
-                        {
-                            if (!this.wieldedWeapon.equals((Weapon) this.inventory.getItems().get(input - 1)))
+                        case 1:
+                            // Choose an item to equip
+                            input = Engine.get().getGUI().integerQuery();
+                            switch (input)
                             {
-                                this.wieldedWeapon = (Weapon) this.inventory.getItems().get(input - 1);
-                            } else
-                            {
-                                this.wieldedWeapon = null;
+                                case -1:
+                                    validInput = false;
+                                    break;
+                                case 0:
+                                    validInput = false;
+                                    break;
+                                default:
+                                    if (input <= Player.get().getInventory().getItems().size() && input > 0)
+                                    {
+                                        validInput = true;
+                                    } else
+                                    {
+                                        System.out.println("Please enter a corresponding number to the item.");
+                                        validInput = false;
+                                    }
+                                    break;
                             }
-                        } else
+                            break;
+                        case 2:
+                            validInput = true;
+                            back = true;
+                            break;
+                    }
+                }
+                try
+                {
+                    Thread.sleep(50);
+                } catch (InterruptedException ex)
+                {
+                    Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (validInput && back)
+            {
+                break;
+            } else if (input <= this.getInventory().getItems().size())
+            {
+                if (this.inventory.getItems().get(input - 1).getClass() == Weapon.class)
+                {
+                    if (this.wieldedWeapon != null)
+                    {
+                        if (!this.wieldedWeapon.equals((Weapon) this.inventory.getItems().get(input - 1)))
                         {
                             this.wieldedWeapon = (Weapon) this.inventory.getItems().get(input - 1);
-                        }
-                    } else if (this.inventory.getItems().get(input - 1).getClass() == Armour.class)
-                    {
-                        if (this.wieldedArmour != null)
-                        {
-                            if (!this.wieldedArmour.equals((Armour) this.inventory.getItems().get(input - 1)))
-                            {
-                                this.wieldedArmour = (Armour) this.inventory.getItems().get(input - 1);
-                            } else
-                            {
-                                this.wieldedArmour = null;
-                            }
                         } else
                         {
-                            this.wieldedArmour = (Armour) this.inventory.getItems().get(input - 1);
+                            this.wieldedWeapon = null;
                         }
+                    } else
+                    {
+                        this.wieldedWeapon = (Weapon) this.inventory.getItems().get(input - 1);
                     }
-                    viewInventory();
-                    System.out.println("Enter the corresponding integer to equip / dequip the item OR enter '0' to go back.");
+                } else if (this.inventory.getItems().get(input - 1).getClass() == Armour.class)
+                {
+                    if (this.wieldedArmour != null)
+                    {
+                        if (!this.wieldedArmour.equals((Armour) this.inventory.getItems().get(input - 1)))
+                        {
+                            this.wieldedArmour = (Armour) this.inventory.getItems().get(input - 1);
+                        } else
+                        {
+                            this.wieldedArmour = null;
+                        }
+                    } else
+                    {
+                        this.wieldedArmour = (Armour) this.inventory.getItems().get(input - 1);
+                    }
                 }
-            } catch (Exception e)
-            {
-                System.out.println("Invalid input");
-                World.get().getScanner().nextLine();
+                viewInventory();
+                try
+                {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex)
+                {
+                    Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                validInput = false;
             }
         }
     }
-    
+
     /**
-    *   prints stats
-    */
+     * prints stats
+     */
     private void printStats()
     {
         System.out.println(this.name + " XP:" + this.xp + "/" + this.xpToNextLevel);
-        System.out.println("Strength: " +this.stats.strength);
+        System.out.println("Strength: " + this.stats.strength);
         System.out.println("Dexterity: " + this.stats.dexterity);
         System.out.println("Vitality: " + this.stats.vitality);
         System.out.println("Stamina: " + this.stats.stamina);
     }
-    
+
     /**
-    *   allocates skillpoints to specific stats
-    */
+     * allocates skillpoints to specific stats
+     */
     private boolean allocateStats() throws IOException
     {
         // gui alloc Stats
@@ -279,7 +329,7 @@ public class Player extends CombatObject
         System.out.println("0. Back");
 
         boolean validInput = false;
-        while(!validInput)
+        while (!validInput)
         {
 
             int input = -1;
@@ -287,27 +337,27 @@ public class Player extends CombatObject
             {
                 switch (World.get().getButtonInputStream().read())
                 {
-                case 1:
-                    this.stats.strength++;
-                    validInput = true;
-                    break;
-                case 2:
-                    this.stats.dexterity++;
-                    validInput = true;
-                    break;
-                case 3:
-                    this.stats.vitality++;
-                    validInput = true;
-                    break;
-                case 4:
-                    this.stats.stamina++;
-                    validInput = true;
-                    break;
-                case 5:
-                    return false;
-                default:
-                    System.out.println("Invalid option");
-                    return false;
+                    case 1:
+                        this.stats.strength++;
+                        validInput = true;
+                        break;
+                    case 2:
+                        this.stats.dexterity++;
+                        validInput = true;
+                        break;
+                    case 3:
+                        this.stats.vitality++;
+                        validInput = true;
+                        break;
+                    case 4:
+                        this.stats.stamina++;
+                        validInput = true;
+                        break;
+                    case 5:
+                        return false;
+                    default:
+                        System.out.println("Invalid option");
+                        return false;
                 }
             }
             try
@@ -319,26 +369,27 @@ public class Player extends CombatObject
             }
         }
         availableSkillPoints--;
-        
+
         return true;
     }
 
     /**
-    *   manage player skill point allocations
-    */
+     * manage player skill point allocations
+     */
     public void manageStats() throws InterruptedException, IOException
     {
         Engine.get().getGUI().manageStats();
+        World.get().getButtonInputStream().clear();
         printStats();
         System.out.println("You have " + this.availableSkillPoints + " stat points available for allocation.");
-        
+
         if (this.availableSkillPoints > 0)
         {
             System.out.println("Would you like to allocate them now?");
-            
+
             System.out.println("1. Yes");
             System.out.println("2. Back");
-            
+
             boolean validInput = false;
             while (!validInput)
             {
@@ -371,8 +422,7 @@ public class Player extends CombatObject
                 }
                 Thread.sleep(50);
             }
-        }
-        else
+        } else
         {
             System.out.println("Returning to menu");
             Thread.sleep(500);

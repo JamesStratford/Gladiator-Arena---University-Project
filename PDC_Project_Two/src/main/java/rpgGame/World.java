@@ -185,12 +185,6 @@ public class World
             player = Player.get();
             if (player.getAlive())
             {
-//                System.out.println(""
-//                        + "1. Fight in the arena\n"
-//                        + "2. Visit the shop\n"
-//                        + "3. Manage inventory\n"
-//                        + "4. View stats and assign skill points\n"
-//                        + "5. Save and quit");
                 System.out.println("You are waiting in the town center, contemplating your next move.");
 
                 try
@@ -232,6 +226,7 @@ public class World
                                     getButtonInputStream().clear();
                                     break;
                             }
+                            World.get().getButtonInputStream().clear();
                         }
                         Thread.sleep(20);
                     }
