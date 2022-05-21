@@ -5,15 +5,25 @@
  */
 package rpgGame.GUI;
 
+import java.awt.Graphics;
+import java.awt.Image;
 import utility.TextAreaOutputStream;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import rpgGame.CombatObject.Player;
 import rpgGame.Engine;
+import rpgGame.World;
 import utility.ButtonInputQueue;
 
 /**
@@ -31,6 +41,13 @@ public class MainGUI extends javax.swing.JFrame
     {
         initComponents();       
         System.setOut(new PrintStream(new TextAreaOutputStream(jTextArea)));
+        
+        jLabelPlayerHP.setVisible(false);
+        jLabelEnemyHP.setVisible(false);
+        jProgressBarPlayerHP.setVisible(false);
+        jProgressBarPlayerFatigue.setVisible(false);
+        jProgressBarEnemyHP.setVisible(false);
+        jProgressBarEnemyFatigue.setVisible(false);
         
         // Keeps output window from tearing and overlapping text
         new Thread(new Runnable() {
@@ -129,13 +146,43 @@ public class MainGUI extends javax.swing.JFrame
         
     }
     
+    
     public ButtonInputQueue getButtonInputs()
     {
         return buttonInputs;
     }
 
+    public void setHpBars()
+    {
+        jLabelPlayerHP.setVisible(true);
+        jLabelEnemyHP.setVisible(true);
+        jProgressBarPlayerHP.setVisible(true);
+        jProgressBarPlayerFatigue.setVisible(true);
+        jProgressBarEnemyHP.setVisible(true);
+        jProgressBarEnemyFatigue.setVisible(true);
+        jProgressBarPlayerHP.setMaximum(Player.get().getMaxHealthPoints());
+        jProgressBarPlayerFatigue.setMaximum(Player.get().getMaxFatiguePoints());
+        jProgressBarPlayerHP.setValue(Player.get().getHealthPoints());
+        jProgressBarPlayerFatigue.setValue(Player.get().getFatiguePoints());
+        
+        if (World.get().getArena().getEnemy() != null)
+        {
+            jProgressBarEnemyHP.setMaximum(World.get().getArena().getEnemy().getMaxHealthPoints());
+            jProgressBarEnemyFatigue.setMaximum(World.get().getArena().getEnemy().getMaxFatiguePoints());
+            jProgressBarEnemyHP.setValue(World.get().getArena().getEnemy().getHealthPoints());
+            jProgressBarEnemyFatigue.setValue(World.get().getArena().getEnemy().getFatiguePoints());
+        }
+    }
+    
     public void mainMenu()
     {
+        try
+        {
+            imagePanel.setImage(ImageIO.read(new File("./resources/gladiator_arena.jpg")));
+        } catch (IOException ex)
+        {
+            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         jTextArea.setText("");
         jButtonOptionOne.setVisible(true);
         jButtonOptionOne.setText("<html>New Game<html>");
@@ -151,6 +198,19 @@ public class MainGUI extends javax.swing.JFrame
     
     public void townCenter()
     {
+        try
+        {
+            imagePanel.setImage(ImageIO.read(new File("./resources/town_center.jpg")));
+        } catch (IOException ex)
+        {
+            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jLabelPlayerHP.setVisible(false);
+        jLabelEnemyHP.setVisible(false);
+        jProgressBarPlayerHP.setVisible(false);
+        jProgressBarPlayerFatigue.setVisible(false);
+        jProgressBarEnemyHP.setVisible(false);
+        jProgressBarEnemyFatigue.setVisible(false);
         jTextArea.setText("");
         jButtonOptionOne.setVisible(true);
         jButtonOptionOne.setText("<html>Enter arena<html>");
@@ -170,6 +230,13 @@ public class MainGUI extends javax.swing.JFrame
     
     public void arena()
     {
+        try
+        {
+            imagePanel.setImage(ImageIO.read(new File("./resources/arena.jpg")));
+        } catch (IOException ex)
+        {
+            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         jTextArea.setText("");
         jButtonOptionOne.setVisible(true);
         jButtonOptionOne.setText("<html>Attack!<html>");
@@ -187,6 +254,13 @@ public class MainGUI extends javax.swing.JFrame
     
     public void shop()
     {
+        try
+        {
+            imagePanel.setImage(ImageIO.read(new File("./resources/shop.jpg")));
+        } catch (IOException ex)
+        {
+            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         jTextArea.setText("");
         jButtonOptionOne.setVisible(true);
         jButtonOptionOne.setText("<html>Buy<html>");
@@ -232,6 +306,13 @@ public class MainGUI extends javax.swing.JFrame
     
     public void manageStats()
     {
+        try
+        {
+            imagePanel.setImage(ImageIO.read(new File("./resources/manage_stats.jpg")));
+        } catch (IOException ex)
+        {
+            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         jButtonOptionOne.setVisible(true);
         jButtonOptionOne.setText("<html>Yes<html>");
 
@@ -266,12 +347,37 @@ public class MainGUI extends javax.swing.JFrame
     
     public void manageInventory()
     {
+        try
+        {
+            imagePanel.setImage(ImageIO.read(new File("./resources/manage_inventory.jpg")));
+        } catch (IOException ex)
+        {
+            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         jButtonOptionOne.setVisible(true);
         jButtonOptionOne.setText("<html>Equip/Dequip an item:<html>");
 
         jButtonOptionTwo.setVisible(true);
         jButtonOptionTwo.setText("<html>Cancel<html>");
 
+        jButtonOptionThree.setVisible(false);
+        jButtonOptionFour.setVisible(false);
+        jButtonOptionFive.setVisible(false);
+        jButtonOptionSix.setVisible(false);
+    }
+    
+    
+    public void deadScreen()
+    {
+        try
+        {
+            imagePanel.setImage(ImageIO.read(new File("./resources/dead.jpg")));
+        } catch (IOException ex)
+        {
+            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jButtonOptionOne.setVisible(false);
+        jButtonOptionTwo.setVisible(false);
         jButtonOptionThree.setVisible(false);
         jButtonOptionFour.setVisible(false);
         jButtonOptionFive.setVisible(false);
@@ -300,6 +406,8 @@ public class MainGUI extends javax.swing.JFrame
         return ret;
     }
     
+
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -310,7 +418,8 @@ public class MainGUI extends javax.swing.JFrame
     private void initComponents()
     {
 
-        jPanel1 = new javax.swing.JPanel();
+        jPanelPicture = new ImagePanel();
+        imagePanel = new rpgGame.GUI.ImagePanel();
         jPanel2 = new javax.swing.JPanel();
         jButtonQuit = new javax.swing.JButton();
         jButtonOptionThree = new javax.swing.JButton();
@@ -322,6 +431,13 @@ public class MainGUI extends javax.swing.JFrame
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea = new javax.swing.JTextArea();
+        jPanelHPBars = new javax.swing.JPanel();
+        jProgressBarPlayerHP = new javax.swing.JProgressBar();
+        jProgressBarPlayerFatigue = new javax.swing.JProgressBar();
+        jLabelEnemyHP = new javax.swing.JLabel();
+        jProgressBarEnemyHP = new javax.swing.JProgressBar();
+        jProgressBarEnemyFatigue = new javax.swing.JProgressBar();
+        jLabelPlayerHP = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Arena Battler");
@@ -330,15 +446,32 @@ public class MainGUI extends javax.swing.JFrame
         setName("mainFrame"); // NOI18N
         setResizable(false);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout imagePanelLayout = new javax.swing.GroupLayout(imagePanel);
+        imagePanel.setLayout(imagePanelLayout);
+        imagePanelLayout.setHorizontalGroup(
+            imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 217, Short.MAX_VALUE)
+        imagePanelLayout.setVerticalGroup(
+            imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 191, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanelPictureLayout = new javax.swing.GroupLayout(jPanelPicture);
+        jPanelPicture.setLayout(jPanelPictureLayout);
+        jPanelPictureLayout.setHorizontalGroup(
+            jPanelPictureLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelPictureLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanelPictureLayout.setVerticalGroup(
+            jPanelPictureLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelPictureLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -375,12 +508,64 @@ public class MainGUI extends javax.swing.JFrame
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jScrollPane1)
-                .addGap(1, 1, 1))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 3, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
+        );
+
+        jProgressBarPlayerHP.setForeground(new java.awt.Color(255, 0, 51));
+        jProgressBarPlayerHP.setStringPainted(true);
+
+        jProgressBarPlayerFatigue.setForeground(new java.awt.Color(51, 153, 0));
+        jProgressBarPlayerFatigue.setStringPainted(true);
+
+        jLabelEnemyHP.setText("Enemy");
+
+        jProgressBarEnemyHP.setForeground(new java.awt.Color(255, 0, 51));
+        jProgressBarEnemyHP.setStringPainted(true);
+
+        jProgressBarEnemyFatigue.setForeground(new java.awt.Color(51, 153, 0));
+        jProgressBarEnemyFatigue.setStringPainted(true);
+
+        jLabelPlayerHP.setText("Player");
+
+        javax.swing.GroupLayout jPanelHPBarsLayout = new javax.swing.GroupLayout(jPanelHPBars);
+        jPanelHPBars.setLayout(jPanelHPBarsLayout);
+        jPanelHPBarsLayout.setHorizontalGroup(
+            jPanelHPBarsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelHPBarsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelHPBarsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jProgressBarPlayerHP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jProgressBarPlayerFatigue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jProgressBarEnemyHP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jProgressBarEnemyFatigue, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanelHPBarsLayout.createSequentialGroup()
+                        .addGroup(jPanelHPBarsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelEnemyHP)
+                            .addComponent(jLabelPlayerHP))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanelHPBarsLayout.setVerticalGroup(
+            jPanelHPBarsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelHPBarsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabelPlayerHP)
+                .addGap(12, 12, 12)
+                .addComponent(jProgressBarPlayerHP, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jProgressBarPlayerFatigue, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addComponent(jLabelEnemyHP)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jProgressBarEnemyHP, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jProgressBarEnemyFatigue, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -390,18 +575,23 @@ public class MainGUI extends javax.swing.JFrame
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanelPicture, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanelHPBars, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanelPicture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanelHPBars, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -457,6 +647,7 @@ public class MainGUI extends javax.swing.JFrame
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private rpgGame.GUI.ImagePanel imagePanel;
     private javax.swing.JButton jButtonOptionFive;
     private javax.swing.JButton jButtonOptionFour;
     private javax.swing.JButton jButtonOptionOne;
@@ -464,9 +655,16 @@ public class MainGUI extends javax.swing.JFrame
     private javax.swing.JButton jButtonOptionThree;
     private javax.swing.JButton jButtonOptionTwo;
     private javax.swing.JButton jButtonQuit;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabelEnemyHP;
+    private javax.swing.JLabel jLabelPlayerHP;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanelHPBars;
+    private javax.swing.JPanel jPanelPicture;
+    private javax.swing.JProgressBar jProgressBarEnemyFatigue;
+    private javax.swing.JProgressBar jProgressBarEnemyHP;
+    private javax.swing.JProgressBar jProgressBarPlayerFatigue;
+    private javax.swing.JProgressBar jProgressBarPlayerHP;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea;
     // End of variables declaration//GEN-END:variables

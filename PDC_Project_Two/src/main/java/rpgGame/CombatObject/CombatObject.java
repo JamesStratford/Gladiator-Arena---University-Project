@@ -47,6 +47,15 @@ public abstract class CombatObject
     {
         return healthPoints;
     }
+    
+    /**
+     * 
+     * @return max HP
+     */
+    public int getMaxHealthPoints()
+    {
+        return maxHP;
+    }
 
     /**
      * @return the fatiguePoints
@@ -54,6 +63,15 @@ public abstract class CombatObject
     public int getFatiguePoints()
     {
         return fatiguePoints;
+    }
+    
+    /**
+     * 
+     * @return max fatigue
+     */
+    public int getMaxFatiguePoints()
+    {
+        return maxFatiguePoints;
     }
     
     /**

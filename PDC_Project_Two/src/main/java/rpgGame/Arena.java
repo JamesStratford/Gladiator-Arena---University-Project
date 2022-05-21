@@ -21,8 +21,10 @@ public class Arena
      */
     public void arenaMain() throws InterruptedException
     {
-        Engine.get().getGUI().arena();
         World.get().getButtonInputStream().clear();
+        Engine.get().getGUI().setHpBars();
+        Engine.get().getGUI().arena();
+        
         enemy = Enemy.generateRandomEnemy();
         player = Player.get();
         printArenaWelcome();
@@ -45,6 +47,11 @@ public class Arena
             System.out.println("You found " +enemy.getLoot().getLootAsCoins()+ " coins on your enemies corpse.");
             System.out.println("You gained " +enemy.getXpGiven()+ " xp.\n");
         }
+    }
+    
+    public Enemy getEnemy()
+    {
+        return this.enemy;
     }
     
     /**
@@ -119,6 +126,7 @@ public class Arena
     {
         while (player.getAlive() && enemy.getAlive())
         {
+            Engine.get().getGUI().setHpBars();
             System.out.println("\n\nPlayers turn...");
             System.out.println(player.toString() + " HP: " + player.getHealthPoints() + ". Fatigue: " + player.getFatiguePoints());
             Thread.sleep(500);
@@ -132,6 +140,8 @@ public class Arena
                 enemyTurn();
             }
         }
+        
+        Engine.get().getGUI().setHpBars();
         
         if (player.getAlive())
         {

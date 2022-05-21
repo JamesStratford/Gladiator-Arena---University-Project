@@ -43,6 +43,15 @@ public class World
         }
         return _instance;
     }
+    
+    /**
+     * 
+     * @return Returns the arena.
+     */
+    public Arena getArena()
+    {
+        return arena;
+    }
 
     /**
      *
@@ -234,10 +243,23 @@ public class World
                 { }
             } else
             {
+                Engine.get().getGUI().deadScreen();
                 System.out.println("Game over man! Game over!");
                 System.out.println("Slain enemies:");
                 System.out.println(player.getDefeatedEnemies());
                 quitGame = true;
+                try
+                {
+                    int time = 5;
+                    while (time >= 0)
+                    {
+                        System.out.println("Game will self-destruct in " + time--);
+                        Thread.sleep(1000);
+                    }
+                } catch (InterruptedException ex)
+                {
+                    Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }
