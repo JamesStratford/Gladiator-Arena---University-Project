@@ -29,10 +29,9 @@ public class ArrayQueue<E> implements QueueADT<E>
     public void enqueue(Object element)
     {
         size++;
-        if (rear != currentCapacity)
+        if (rear < currentCapacity)
         {
-            queue[rear] = (E) element;
-            rear++;
+            queue[rear++] = (E) element;
         }
         else if (front > 0)
         {
@@ -84,10 +83,7 @@ public class ArrayQueue<E> implements QueueADT<E>
     @Override
     public boolean isEmpty()
     {
-        if (queue[front] != null)
-            return false;
-        
-        return true;
+        return size == 0;
     }
 
     @Override
@@ -98,8 +94,8 @@ public class ArrayQueue<E> implements QueueADT<E>
     
     public void expandCapacity()
     {
-        if (queue[0] != null)
-        {
+//        if (queue[0] != null)
+//        {
             int newSize = queue.length * 2;
             E[] newArray = (E[])(new Object[newSize]);
             int k = front;
@@ -118,7 +114,7 @@ public class ArrayQueue<E> implements QueueADT<E>
 
             currentCapacity = newSize;
             queue = newArray;
-        }
+//        }
     }
     
     public static void main(String[] args)

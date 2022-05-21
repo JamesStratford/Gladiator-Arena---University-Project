@@ -173,6 +173,7 @@ public class World
 
         while (!quitGame)
         {
+            getButtonInputStream().clear();
             try
             {
                 Thread.sleep(500);
@@ -228,15 +229,14 @@ public class World
                                     break;
                                 default:
                                     System.out.println("Invalid option");
+                                    getButtonInputStream().clear();
                                     break;
                             }
                         }
                         Thread.sleep(20);
                     }
-                } catch (Exception e)
-                {
-                    System.out.println("Invalid input DEBUG: startGame: " + e.toString());
-                }
+                } catch (InterruptedException e)
+                { }
             } else
             {
                 System.out.println("Game over man! Game over!");

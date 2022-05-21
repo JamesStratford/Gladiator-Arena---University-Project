@@ -3,6 +3,9 @@ package rpgGame.CombatObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import rpgGame.Engine;
 import rpgGame.Items.Armour;
 import rpgGame.Items.Item;
 import rpgGame.Items.Weapon;
@@ -267,6 +270,7 @@ public class Player extends CombatObject
     */
     private boolean allocateStats() throws IOException
     {
+        // gui alloc Stats
         System.out.println("Which stat would you like to add 1 point to?");
         System.out.println("1. Strength");
         System.out.println("2. Dexterity");
@@ -277,38 +281,41 @@ public class Player extends CombatObject
         boolean validInput = false;
         while(!validInput)
         {
+
+            int input = -1;
+            if (!World.get().getButtonInputStream().isEmpty())
+            {
+                switch (World.get().getButtonInputStream().read())
+                {
+                case 1:
+                    this.stats.strength++;
+                    validInput = true;
+                    break;
+                case 2:
+                    this.stats.dexterity++;
+                    validInput = true;
+                    break;
+                case 3:
+                    this.stats.vitality++;
+                    validInput = true;
+                    break;
+                case 4:
+                    this.stats.stamina++;
+                    validInput = true;
+                    break;
+                case 5:
+                    return false;
+                default:
+                    System.out.println("Invalid option");
+                    return false;
+                }
+            }
             try
             {
-
-                int input = World.get().getScanner().nextInt();
-
-                switch (input)
-                {
-                    case 1:
-                        this.stats.strength++;
-                        validInput = true;
-                        break;
-                    case 2:
-                        this.stats.dexterity++;
-                        validInput = true;
-                        break;
-                    case 3:
-                        this.stats.vitality++;
-                        validInput = true;
-                        break;
-                    case 4:
-                        this.stats.stamina++;
-                        validInput = true;
-                        break;
-                    case 0:
-                        return false;
-                    default:
-                        System.out.println("Invalid option");
-                        break;
-                }
-            } catch(Exception e) { 
-                System.out.println("Invalid input");
-                World.get().getScanner().nextLine();
+                Thread.sleep(50);
+            } catch (InterruptedException ex)
+            {
+                Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         availableSkillPoints--;
@@ -321,6 +328,7 @@ public class Player extends CombatObject
     */
     public void manageStats() throws InterruptedException, IOException
     {
+        Engine.get().getGUI().manageStats();
         printStats();
         System.out.println("You have " + this.availableSkillPoints + " stat points available for allocation.");
         
@@ -333,35 +341,35 @@ public class Player extends CombatObject
             
             boolean validInput = false;
             while (!validInput)
-            try
             {
-                int input = World.get().getScanner().nextInt();
-                
-                switch (input)
+                if (!World.get().getButtonInputStream().isEmpty())
                 {
-                    case 1:
-                        //alloc stats
-                        if (availableSkillPoints > 0)
-                        {
-                            allocateStats();
-                            printStats();
-                            System.out.println("You have " + this.availableSkillPoints + " stat points available for allocation.");
-                            System.out.println("Would you like to allocate them now?");
-                            System.out.println("1. Yes");
-                            System.out.println("2. Back");
-                        }
-                        break;
-                    case 2:
-                        // back
-                        validInput = true;
-                        break;
-                    default:
-                        System.out.println("Invalid option");
-                        break;
+                    switch (World.get().getButtonInputStream().read())
+                    {
+                        case 1:
+                            //alloc stats
+                            if (availableSkillPoints > 0)
+                            {
+                                Engine.get().getGUI().allocStats();
+                                allocateStats();
+                                Engine.get().getGUI().manageStats();
+                                printStats();
+                                System.out.println("You have " + this.availableSkillPoints + " stat points available for allocation.");
+                                System.out.println("Would you like to allocate them now?");
+                                System.out.println("1. Yes");
+                                System.out.println("2. Back");
+                            }
+                            break;
+                        case 2:
+                            // back
+                            validInput = true;
+                            break;
+                        default:
+                            System.out.println("Invalid option");
+                            return;
+                    }
                 }
-            } catch(Exception e) { 
-                System.out.println("Invalid input");
-                World.get().getScanner().nextLine();
+                Thread.sleep(50);
             }
         }
         else

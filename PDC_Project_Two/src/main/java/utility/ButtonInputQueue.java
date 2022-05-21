@@ -15,14 +15,21 @@ public class ButtonInputQueue
         inputs = new ArrayQueue();
     }
     
-    public int read()
+    synchronized public int read()
     {
         if (!inputs.isEmpty())
         {
-            return inputs.dequeue();
+            int ret = inputs.dequeue();
+            return ret;
         }
         
         return -1;
+    }
+    
+    synchronized public void clear()
+    {
+        while (!inputs.isEmpty())
+            inputs.dequeue();
     }
     
     public void addInput(int option)
@@ -30,7 +37,7 @@ public class ButtonInputQueue
         inputs.enqueue(option);
     }
     
-    public boolean isEmpty()
+    synchronized public boolean isEmpty()
     {
         return inputs.size() == 0;
     }

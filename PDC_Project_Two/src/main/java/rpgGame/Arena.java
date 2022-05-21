@@ -69,7 +69,6 @@ public class Arena
         {
             if (!World.get().getButtonInputStream().isEmpty())
             {
-                System.out.println("woprking");
                 switch (World.get().getButtonInputStream().read())
                 {
                     case 1:

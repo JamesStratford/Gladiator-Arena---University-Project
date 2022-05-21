@@ -5,19 +5,15 @@
  */
 package rpgGame.GUI;
 
-import java.awt.Color;
 import utility.TextAreaOutputStream;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import rpgGame.Engine;
-import rpgGame.FileManager;
-import rpgGame.World;
 import utility.ButtonInputQueue;
 
 /**
@@ -231,6 +227,40 @@ public class MainGUI extends javax.swing.JFrame
         jButtonOptionThree.setVisible(false);
         jButtonOptionFour.setVisible(false);
         jButtonOptionFive.setVisible(false);
+        jButtonOptionSix.setVisible(false);
+    }
+    
+    public void manageStats()
+    {
+        jButtonOptionOne.setVisible(true);
+        jButtonOptionOne.setText("<html>Yes<html>");
+
+        jButtonOptionTwo.setVisible(true);
+        jButtonOptionTwo.setText("<html>Back<html>");
+
+        jButtonOptionThree.setVisible(false);
+        jButtonOptionFour.setVisible(false);
+        jButtonOptionFive.setVisible(false);
+        jButtonOptionSix.setVisible(false);
+    }
+    
+    public void allocStats()
+    {
+        jButtonOptionOne.setVisible(true);
+        jButtonOptionOne.setText("<html>Strength<html>");
+
+        jButtonOptionTwo.setVisible(true);
+        jButtonOptionTwo.setText("<html>Dexterity<html>");
+
+        jButtonOptionThree.setVisible(true);
+        jButtonOptionThree.setText("<html>Vitality<html>");
+        
+        jButtonOptionFour.setVisible(true);
+        jButtonOptionFour.setText("<html>Stamina<html>");
+        
+        jButtonOptionFive.setVisible(true);
+        jButtonOptionFive.setText("<html>Cancel<html>");
+        
         jButtonOptionSix.setVisible(false);
     }
     
