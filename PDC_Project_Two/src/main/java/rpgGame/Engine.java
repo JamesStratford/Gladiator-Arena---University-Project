@@ -13,12 +13,19 @@ public class Engine
     private static Engine _instance = null;
     private World world;
     private MainGUI gui;
+    private boolean gameStart;
     
     public Engine()
     {
         world = World.get();
         gui = new MainGUI();
         gui.setVisible(true);
+        gameStart = false;
+    }
+    
+    public void gameStarted()
+    {
+        gameStart = true;
     }
     
     /*
@@ -43,7 +50,8 @@ public class Engine
     */
     public void shutdown() throws IOException
     {
-        FileManager.get().saveGame();
+        if (gameStart)
+            FileManager.get().saveGame();
         World.get().setQuit(true);
         System.out.println("Quitting");
         System.exit(0);

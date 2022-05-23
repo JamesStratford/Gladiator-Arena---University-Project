@@ -89,13 +89,9 @@ public class World
         
         
         FileManager.get().initialiseItemData();
-        System.out.println("==============================================================================");
+        System.out.println("=====================================================================");
         System.out.println("                                               GLADIATOR GAME");
-        System.out.println("==============================================================================");
-
-//        System.out.println("1. New game");
-//        System.out.println("2. Load game");
-//        System.out.println("3. Quit");
+        System.out.println("=====================================================================");
         System.out.println("Select an option at the bottom to begin.");
 
             boolean validInput = false;
@@ -171,6 +167,7 @@ public class World
      */
     public void startGame() throws IOException
     {
+        Engine.get().gameStarted();
         if (newGame)
         {
             printIntroduction();
