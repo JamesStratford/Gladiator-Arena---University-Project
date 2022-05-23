@@ -1,10 +1,12 @@
 package rpgGame;
 
+import rpgGame.Database.DataManager;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rpgGame.CombatObject.Player;
+import rpgGame.Database.rpgGameDatabase;
 import utility.ButtonInputQueue;
 
 /**
@@ -14,6 +16,7 @@ import utility.ButtonInputQueue;
 public class World
 {
     private static World _instance = null;
+    private rpgGameDatabase saveDB;
     private Player player;
     private Arena arena;
     private Shop shop;
@@ -23,6 +26,7 @@ public class World
 
     public World()
     {
+        saveDB = new rpgGameDatabase();
         player = Player.get();
         arena = new Arena();
         scanner = new Scanner(System.in);
@@ -88,7 +92,7 @@ public class World
         Engine.get().getGUI().mainMenu();
         
         
-        FileManager.get().initialiseItemData();
+        DataManager.get().initialiseItemData();
         System.out.println("=====================================================================");
         System.out.println("                                               GLADIATOR GAME");
         System.out.println("=====================================================================");
@@ -108,7 +112,9 @@ public class World
                             validInput = true;
                             break;
                         case 2:
-                            if(!FileManager.get().loadGame())
+//                            if(!FileManager.get().loadGame())
+                            String playerName = Engine.get().getGUI().loadGamePrompt();
+                            if (!DataManager.get().loadGame(playerName))
                             {
                                 System.out.println("Creating a new game...");
                                 createPlayer();
@@ -173,7 +179,7 @@ public class World
             printIntroduction();
         }
         
-        FileManager.get().startGame();
+        DataManager.get().startGame();
         shop = new Shop();
         
 

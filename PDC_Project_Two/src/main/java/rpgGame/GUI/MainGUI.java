@@ -146,6 +146,13 @@ public class MainGUI extends javax.swing.JFrame
         
     }
     
+    public String loadGamePrompt()
+    {
+        String out = "";
+        out += (String) JOptionPane.showInputDialog(this, "Enter a name");
+
+        return out;
+    }
     
     public ButtonInputQueue getButtonInputs()
     {

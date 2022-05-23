@@ -1,5 +1,6 @@
 package rpgGame;
 
+import rpgGame.Database.DataManager;
 import java.io.IOException;
 import rpgGame.GUI.MainGUI;
 
@@ -51,7 +52,7 @@ public class Engine
     public void shutdown() throws IOException
     {
         if (gameStart)
-            FileManager.get().saveGame();
+            DataManager.get().saveGame();
         World.get().setQuit(true);
         System.out.println("Quitting");
         System.exit(0);
