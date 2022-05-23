@@ -1,9 +1,9 @@
+/**
+ * This interface is from a lab activity from my Data Structures and Algorithms paper.
+ */
+
 package utility;
 
-/**
-   An interface that defines the abstract data type
-   for a queue collection of elements with type E
-*/
 import java.util.NoSuchElementException;
 
 public interface QueueADT<E>

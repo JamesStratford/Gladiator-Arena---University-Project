@@ -1,3 +1,6 @@
+/**
+ * This class is a lab activity I made in my Data Structures and Algorithms paper.
+ */
 package utility;
 
 import java.util.NoSuchElementException;
