@@ -6,6 +6,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -75,20 +77,34 @@ public class MainDatabase
             DriverManager.registerDriver(new org.apache.derby.jdbc.EmbeddedDriver());
             conn = DriverManager.getConnection(url, dbusername, dbpassword);
             Statement statement = conn.createStatement();
-            String tableName = "GameSave";
+            String[] tableNames = {"GameSave", "Weapons", "Armour"};
 
-            if (!checkTableExisting(tableName))
+            if (!checkTableExisting(tableNames[0]))
             {
-                statement.executeUpdate("CREATE TABLE " + tableName + " (name VARCHAR(12), level INT, xp INT, "
+                statement.executeUpdate("CREATE TABLE " + tableNames[0] + " (name VARCHAR(20), level INT, xp INT, "
                         + "xpToLevelUp INT, availableSkillPoints INT, strength INT, dexterity INT, vitality INT, "
                         + "stamina INT, coins INT, inventory VARCHAR(20), equiptWeapon INT, equiptArmour INT,"
                         + "PRIMARY KEY (name))");
             }
+            
+            if (!checkTableExisting(tableNames[1]))
+            {
+                statement.executeUpdate("CREATE TABLE " + tableNames[1] + " (itemId INT, itemName VARCHAR(20), "
+                        + "coinValue INT, weight DOUBLE, meanDamage INT, "
+                        + "PRIMARY KEY (itemId))");
+            }
+            
+            if (!checkTableExisting(tableNames[2]))
+            {
+                statement.executeUpdate("CREATE TABLE " + tableNames[2] + " (itemId INT, itemName VARCHAR(20), "
+                        + "coinValue INT, weight DOUBLE, block INT, blockPercentage FLOAT, "
+                        + "PRIMARY KEY (itemId))");
+            }
             statement.close();
 
-        } catch (Throwable e)
+        } catch (SQLException ex)
         {
-            System.out.println(e);
+            Logger.getLogger(MainDatabase.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

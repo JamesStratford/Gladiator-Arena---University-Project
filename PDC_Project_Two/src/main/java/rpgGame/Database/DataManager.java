@@ -110,8 +110,10 @@ public class DataManager
     /**
     *   creates master items and places them in the items HashSet
      * @throws java.io.IOException
+     * @throws java.io.FileNotFoundException
+     * @throws java.sql.SQLException
     */
-    public void initialiseItemData() throws IOException
+    public void initialiseItemData() throws IOException, FileNotFoundException, SQLException
     {
         new ItemInitialiser().initialiseItemData();
     }
@@ -121,11 +123,17 @@ public class DataManager
     */
     private class ItemInitialiser
     {
-        public void initialiseItemData() throws IOException
+        public void initialiseItemData() throws IOException, FileNotFoundException, SQLException
         {
             Item.items = new HashMap<>();
-            initialiseWeaponData();
-            initialiseArmourData();
+            try
+            {
+                initialiseWeaponData();
+                initialiseArmourData();
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
             Weapon.weapons.forEach(weapon ->
             {
                 Item.items.put(weapon.getItemId(), weapon);
@@ -137,13 +145,19 @@ public class DataManager
         }
         
         /**
-        *   reads in armour data and initialises it into Armour master-list.
+         * Reads data from file and adds any weapons not already in the
+         * database, then loads armour into Armour hash set.
+         * @throws FileNotFoundException
+         * @throws IOException
+         * @throws SQLException
          */
-        private void initialiseArmourData() throws FileNotFoundException, IOException
+        private void initialiseArmourData() throws FileNotFoundException, IOException, SQLException
         {
             Armour.armours = new HashSet<>();
 
             BufferedReader reader = new BufferedReader(new FileReader(new File("./resources/armour.txt")));
+            
+            ResultSet rs = MainDatabase.get().getConnection().createStatement().executeQuery("SELECT * FROM Armour");
 
             String string = reader.readLine();
             while (string != null)
@@ -151,26 +165,68 @@ public class DataManager
                 StringTokenizer armourData = new StringTokenizer(string);
 
                 int itemId = Integer.parseInt(armourData.nextToken(","));
-                String name = armourData.nextToken();
-                int coinValue = Integer.parseInt(armourData.nextToken());
-                double weight = Double.parseDouble(armourData.nextToken());
-                int block = Integer.parseInt(armourData.nextToken());
-                float blockPercentage = Float.parseFloat(armourData.nextToken());
-
-                Armour.armours.add(new Armour(itemId, name, coinValue, weight, block, blockPercentage));
+                boolean inDatabase = false;
+                while (rs.next())
+                {
+                    if (rs.getInt("itemId") == itemId)
+                    {
+                        inDatabase = true;
+                        break;
+                    }
+                }
+                if (!inDatabase)
+                {
+                    String name = armourData.nextToken();
+                    int coinValue = Integer.parseInt(armourData.nextToken());
+                    double weight = Double.parseDouble(armourData.nextToken());
+                    int block = Integer.parseInt(armourData.nextToken());
+                    float blockPercentage = Float.parseFloat(armourData.nextToken());
+                    MainDatabase.get().getConnection().createStatement().executeUpdate("INSERT INTO Armour"
+                            + " VALUES (" + itemId + ", \'" + name + "\', " + coinValue + ", " + weight + ", " + block + ", "+
+                                    blockPercentage+")");
+                }
 
                 string = reader.readLine();
+            }
+            
+            loadArmourFromDatabase();
+        }
+        
+        /**
+         * Loads in armour via the database
+         * @throws SQLException
+         */
+        private void loadArmourFromDatabase() throws SQLException
+        {
+            ResultSet rs = MainDatabase.get().getConnection().createStatement().executeQuery("SELECT * FROM Armour");
+            
+            while (rs.next())
+            {
+                int itemId = rs.getInt("itemId");
+                String name = rs.getString("itemName");
+                int coinValue = rs.getInt("coinValue");
+                double weight = rs.getDouble("weight");
+                int block = rs.getInt("block");
+                float blockPercentage = rs.getFloat("blockPercentage");
+                
+                Armour.armours.add(new Armour(itemId, name, coinValue, weight, block, blockPercentage));
             }
         }
     
         /**
-        *   reads in weapon data and initilises it into Weapons master-list.
-        */
-        private void initialiseWeaponData() throws FileNotFoundException, IOException
+         * Reads data from file and adds any weapons not already in the 
+         * database, then loads weapons into Weapons hash set.
+         * @throws FileNotFoundException
+         * @throws IOException
+         * @throws SQLException 
+         */
+        private void initialiseWeaponData() throws FileNotFoundException, IOException, SQLException
         {
             Weapon.weapons = new HashSet<>();
 
             BufferedReader reader = new BufferedReader(new FileReader(new File("./resources/weapons.txt")));
+            
+            ResultSet rs = MainDatabase.get().getConnection().createStatement().executeQuery("SELECT * FROM Weapons");
 
             String string = reader.readLine();
             while (string != null)
@@ -178,14 +234,49 @@ public class DataManager
                 StringTokenizer weaponData = new StringTokenizer(string);
 
                 int itemId = Integer.parseInt(weaponData.nextToken(","));
-                String name = weaponData.nextToken();
-                int coinValue = Integer.parseInt(weaponData.nextToken());
-                double weight = Double.parseDouble(weaponData.nextToken());
-                int meanDamage = Integer.parseInt(weaponData.nextToken());
+                boolean inDatabase = false;
+                while (rs.next())
+                {
+                    if (rs.getInt("itemId") == itemId)
+                    {
+                        inDatabase = true;
+                        break;
+                    }
+                }
 
-                Weapon.weapons.add(new Weapon(itemId, name, coinValue, weight, meanDamage));
+                if (!inDatabase)
+                {
+                    String name = weaponData.nextToken();
+                    int coinValue = Integer.parseInt(weaponData.nextToken());
+                    double weight = Double.parseDouble(weaponData.nextToken());
+                    int meanDamage = Integer.parseInt(weaponData.nextToken());
+                    MainDatabase.get().getConnection().createStatement().executeUpdate("INSERT INTO Weapons"
+                            + " VALUES (" + itemId + ", \'"+name+"\', "+coinValue+", "+weight+", "+meanDamage+")");
+                }
 
                 string = reader.readLine();
+            }
+            
+            loadWeaponsFromDatabase();
+        }
+        
+        /**
+         * Loads in weapons via the database
+         * @throws SQLException 
+         */
+        private void loadWeaponsFromDatabase() throws SQLException
+        {
+            ResultSet rs = MainDatabase.get().getConnection().createStatement().executeQuery("SELECT * FROM Weapons");
+
+            while (rs.next())
+            {
+                int itemId = rs.getInt("itemId");
+                String name = rs.getString("itemName");
+                int coinValue = rs.getInt("coinValue");
+                double weight = rs.getDouble("weight");
+                int meanDamage = rs.getInt("meanDamage");
+
+                Weapon.weapons.add(new Weapon(itemId, name, coinValue, weight, meanDamage));
             }
         }
     }
