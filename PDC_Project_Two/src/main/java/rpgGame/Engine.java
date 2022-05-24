@@ -2,6 +2,8 @@ package rpgGame;
 
 import rpgGame.Database.DataManager;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import rpgGame.GUI.MainGUI;
 
 
@@ -12,16 +14,23 @@ import rpgGame.GUI.MainGUI;
 public class Engine
 {
     private static Engine _instance = null;
+    private boolean exit;
     private World world;
     private MainGUI gui;
     private boolean gameStart;
     
     public Engine()
     {
+        exit = true;
         world = World.get();
         gui = new MainGUI();
         gui.setVisible(true);
         gameStart = false;
+    }
+    
+    public void setExit(boolean exit)
+    {
+        this.exit = exit;
     }
     
     public void gameStarted()
@@ -46,6 +55,11 @@ public class Engine
         return this.gui;
     }
     
+    public void mainMenu()
+    {
+        setExit(true);
+    }
+    
     /*
     *   shutsdown the program
     */
@@ -63,7 +77,11 @@ public class Engine
     */
     public static void main(String[] args) throws IOException
     {
-        Engine.get().world.mainMenu();
+
+        do
+        {
+            Engine.get().world.mainMenu();
+        } while (!Engine.get().exit);
         
         System.out.println("Quitting.");
         System.exit(0);

@@ -253,10 +253,11 @@ public class MainGUI extends javax.swing.JFrame
         jButtonOptionFour.setVisible(true);
         jButtonOptionFour.setText("<html>Manage stats and assign skill points<html>");
         
-        jButtonOptionFive.setVisible(false);
+        jButtonOptionFive.setVisible(true);
+        jButtonOptionFive.setText("<html>Export Save<html>");
         
         jButtonOptionSix.setVisible(true);
-        jButtonOptionSix.setText("<html>Export Save<html>");
+        jButtonOptionSix.setText("<html>Main Menu<html>");
     }
     
     public void arena()
@@ -280,7 +281,9 @@ public class MainGUI extends javax.swing.JFrame
 
         jButtonOptionFour.setVisible(false);
         jButtonOptionFive.setVisible(false);
-        jButtonOptionSix.setVisible(false);
+        
+        jButtonOptionSix.setVisible(true);
+        jButtonOptionSix.setText("<html>Main Menu<html>");
     }
     
     public void shop()
@@ -304,7 +307,9 @@ public class MainGUI extends javax.swing.JFrame
 
         jButtonOptionFour.setVisible(false);
         jButtonOptionFive.setVisible(false);
-        jButtonOptionSix.setVisible(false);
+        
+        jButtonOptionSix.setVisible(true);
+        jButtonOptionSix.setText("<html>Main Menu<html>");
     }
     
     public void shopBuy()
@@ -318,7 +323,9 @@ public class MainGUI extends javax.swing.JFrame
         jButtonOptionThree.setVisible(false);
         jButtonOptionFour.setVisible(false);
         jButtonOptionFive.setVisible(false);
-        jButtonOptionSix.setVisible(false);
+        
+        jButtonOptionSix.setVisible(true);
+        jButtonOptionSix.setText("<html>Main Menu<html>");
     }
     
     public void shopSell()
@@ -332,7 +339,9 @@ public class MainGUI extends javax.swing.JFrame
         jButtonOptionThree.setVisible(false);
         jButtonOptionFour.setVisible(false);
         jButtonOptionFive.setVisible(false);
-        jButtonOptionSix.setVisible(false);
+        
+        jButtonOptionSix.setVisible(true);
+        jButtonOptionSix.setText("<html>Main Menu<html>");
     }
     
     public void manageStats()
@@ -353,7 +362,9 @@ public class MainGUI extends javax.swing.JFrame
         jButtonOptionThree.setVisible(false);
         jButtonOptionFour.setVisible(false);
         jButtonOptionFive.setVisible(false);
-        jButtonOptionSix.setVisible(false);
+        
+        jButtonOptionSix.setVisible(true);
+        jButtonOptionSix.setText("<html>Main Menu<html>");
     }
     
     public void allocStats()
@@ -373,7 +384,8 @@ public class MainGUI extends javax.swing.JFrame
         jButtonOptionFive.setVisible(true);
         jButtonOptionFive.setText("<html>Cancel<html>");
         
-        jButtonOptionSix.setVisible(false);
+        jButtonOptionSix.setVisible(true);
+        jButtonOptionSix.setText("<html>Main Menu<html>");
     }
     
     public void manageInventory()
@@ -394,7 +406,9 @@ public class MainGUI extends javax.swing.JFrame
         jButtonOptionThree.setVisible(false);
         jButtonOptionFour.setVisible(false);
         jButtonOptionFive.setVisible(false);
-        jButtonOptionSix.setVisible(false);
+        
+        jButtonOptionSix.setVisible(true);
+        jButtonOptionSix.setText("<html>Main Menu<html>");
     }
     
     

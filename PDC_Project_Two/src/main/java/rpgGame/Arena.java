@@ -14,16 +14,19 @@ public class Arena
 {
     private Enemy enemy;
     private Player player;
+    private boolean exit;
     
     /**
      *  entrance method to run arena
+     * @return exit value, true means quit to main menu
      * @throws InterruptedException 
      */
-    public void arenaMain() throws InterruptedException
+    public boolean arenaMain() throws InterruptedException
     {
         World.get().getButtonInputStream().clear();
         Engine.get().getGUI().setHpBars();
         Engine.get().getGUI().arena();
+        exit = false;
         
         enemy = Enemy.generateRandomEnemy();
         player = Player.get();
@@ -34,7 +37,8 @@ public class Arena
         
         // running battle simulator
         simulateBattle();
-        
+        if (exit)
+            return true;
         // add enemy to defeated list
         if (player.getAlive())
             player.getDefeatedEnemies().add(enemy);
@@ -47,6 +51,8 @@ public class Arena
             System.out.println("You found " +enemy.getLoot().getLootAsCoins()+ " coins on your enemies corpse.");
             System.out.println("You gained " +enemy.getXpGiven()+ " xp.\n");
         }
+        
+        return false;
     }
     
     public Enemy getEnemy()
@@ -89,6 +95,11 @@ public class Arena
                         player.rest();
                         validInput = true;
                         break;
+                    case 6:
+                        // main menu
+                        exit = true;
+                        validInput = true;
+                        break;
                 }
             }
             try
@@ -124,13 +135,15 @@ public class Arena
      */
     public void simulateBattle() throws InterruptedException
     {
-        while (player.getAlive() && enemy.getAlive())
+        while (player.getAlive() && enemy.getAlive() && !exit)
         {
             Engine.get().getGUI().setHpBars();
             System.out.println("\n\nPlayers turn...");
             System.out.println(player.toString() + " HP: " + player.getHealthPoints() + ". Fatigue: " + player.getFatiguePoints());
             Thread.sleep(500);
             queryBattleOptions();
+            if (exit)
+                return;
             System.out.println();
             if (enemy.getAlive())
             {
@@ -140,6 +153,7 @@ public class Arena
                 enemyTurn();
             }
         }
+        
         
         Engine.get().getGUI().setHpBars();
         

@@ -183,6 +183,7 @@ public class World
     public void startGame() throws IOException
     {
         Engine.get().gameStarted();
+        quitGame = false;
         if (newGame)
         {
             printIntroduction();
@@ -219,7 +220,11 @@ public class World
                             {
                                 case 1:
                                     // enter arena
-                                    arena.arenaMain();
+                                    if (arena.arenaMain())
+                                    {
+                                        Engine.get().mainMenu();
+                                        quitGame = true;
+                                    }
                                     validInput = true;
                                     break;
                                 case 2:
@@ -237,7 +242,7 @@ public class World
                                     Player.get().manageStats();
                                     validInput = true;
                                     break;
-                                case 6:
+                                case 5:
                                     // export save
                                     String path = Engine.get().getGUI().getStringPrompt("Enter file path:");
                                     if (DataManager.get().exportGame(path))
@@ -248,6 +253,12 @@ public class World
                                     {
                                         System.out.println("Unable to export save file.");
                                     }
+                                    break;
+                                case 6:
+                                    // main menu
+                                    Engine.get().mainMenu();
+                                    validInput = true;
+                                    quitGame = true;
                                     break;
                                 default:
                                     System.out.println("Invalid option");
