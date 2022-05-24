@@ -25,12 +25,8 @@ public class LoadGameFrame extends javax.swing.JFrame
     private DefaultListModel<String> dm;
     private boolean success;
     
-    /**
-     * Creates new form LoadGameFrame
-     */
-    public LoadGameFrame(CountDownLatch latch)
+    public LoadGameFrame()
     {
-        this.latch = latch;
         this.success = false;
         initComponents();
         dm = new DefaultListModel<>();
@@ -39,6 +35,17 @@ public class LoadGameFrame extends javax.swing.JFrame
         setLocationRelativeTo(null);
         setVisible(true);
     }
+    
+    /**
+     * Creates new form LoadGameFrame
+     */
+    public LoadGameFrame(CountDownLatch latch)
+    {
+        this();
+        this.latch = latch;
+    }
+    
+
 
     public void setLatch(CountDownLatch latch)
     {
@@ -59,6 +66,7 @@ public class LoadGameFrame extends javax.swing.JFrame
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents()
     {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jPanelList = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -109,6 +117,8 @@ public class LoadGameFrame extends javax.swing.JFrame
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jPanelButtons.setLayout(new java.awt.GridBagLayout());
+
         jButtonCancel.setText("Cancel");
         jButtonCancel.addActionListener(new java.awt.event.ActionListener()
         {
@@ -117,6 +127,14 @@ public class LoadGameFrame extends javax.swing.JFrame
                 jButtonCancelActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 29;
+        gridBagConstraints.ipady = 49;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(13, 12, 13, 0);
+        jPanelButtons.add(jButtonCancel, gridBagConstraints);
 
         jButtonLoadGame.setText("Load Game");
         jButtonLoadGame.addActionListener(new java.awt.event.ActionListener()
@@ -126,6 +144,14 @@ public class LoadGameFrame extends javax.swing.JFrame
                 jButtonLoadGameActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 3;
+        gridBagConstraints.ipady = 49;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(13, 7, 13, 12);
+        jPanelButtons.add(jButtonLoadGame, gridBagConstraints);
 
         jButtonDelete.setText("<html>Delete Save<html>");
         jButtonDelete.addActionListener(new java.awt.event.ActionListener()
@@ -135,30 +161,14 @@ public class LoadGameFrame extends javax.swing.JFrame
                 jButtonDeleteActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanelButtonsLayout = new javax.swing.GroupLayout(jPanelButtons);
-        jPanelButtons.setLayout(jPanelButtonsLayout);
-        jPanelButtonsLayout.setHorizontalGroup(
-            jPanelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelButtonsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButtonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
-                .addComponent(jButtonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonLoadGame, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        jPanelButtonsLayout.setVerticalGroup(
-            jPanelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelButtonsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonLoadGame, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
-                    .addComponent(jButtonCancel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonDelete, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap())
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 71;
+        gridBagConstraints.ipady = 49;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(13, 95, 13, 0);
+        jPanelButtons.add(jButtonDelete, gridBagConstraints);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -168,13 +178,13 @@ public class LoadGameFrame extends javax.swing.JFrame
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanelList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanelButtons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanelButtons, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(25, Short.MAX_VALUE)
                 .addComponent(jPanelList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanelButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
