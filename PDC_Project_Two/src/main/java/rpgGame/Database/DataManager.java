@@ -568,11 +568,12 @@ public class DataManager
          * Method to save player stats to the embedded database as an
          * alternative to fileIO
          */
-        public boolean saveToDatabase()
+        private boolean saveToDatabase()
         {
             boolean success = true;
             
             String name = Player.get().getName();
+            name = name.substring(0, Math.min(name.length(), 10));
             int level = Player.get().getLevel();
             int xp = Player.get().getXp();
             int xpToLevelUp = Player.get().getXpToNextLevel();

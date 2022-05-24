@@ -17,8 +17,8 @@ public class MainDatabase
 {
     private static MainDatabase _instance = null;
     private Connection conn = null;
-    private String url = "jdbc:derby:RPGGameDB;create=true";
-//    private String url = "jdbc:derby://localhost:1527/RPGGameDB;create=true";
+//    private String url = "jdbc:derby:RPGGameDB;create=true";
+    private String url = "jdbc:derby://localhost:1527/RPGGameDB;create=true";
 
     private String dbusername = "main";
     private String dbpassword = "main";
@@ -78,7 +78,7 @@ public class MainDatabase
             conn = DriverManager.getConnection(url, dbusername, dbpassword);
             Statement statement = conn.createStatement();
             String[] tableNames = {"GameSave", "Weapons", "Armour"};
-
+            
             if (!checkTableExisting(tableNames[0]))
             {
                 statement.executeUpdate("CREATE TABLE " + tableNames[0] + " (name VARCHAR(20), level INT, xp INT, "

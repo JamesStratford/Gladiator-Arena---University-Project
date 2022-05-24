@@ -5,15 +5,11 @@
  */
 package rpgGame.GUI;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import rpgGame.Database.DataManager;
-import rpgGame.World;
 
 /**
  *
