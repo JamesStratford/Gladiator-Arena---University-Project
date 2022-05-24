@@ -44,8 +44,6 @@ public class LoadGameFrame extends javax.swing.JFrame
         this();
         this.latch = latch;
     }
-    
-
 
     public void setLatch(CountDownLatch latch)
     {

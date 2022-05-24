@@ -57,7 +57,15 @@ public class Engine
     
     public void mainMenu()
     {
-        setExit(true);
+        try
+        {
+            setExit(false);
+            DataManager.get().saveGame();
+            World.resetWorld();
+        } catch (IOException ex)
+        {
+            Logger.getLogger(Engine.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /*

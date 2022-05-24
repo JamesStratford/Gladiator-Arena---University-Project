@@ -234,7 +234,13 @@ public class DataManager
          */
         public void setSaveFilePath(String path)
         {
-            save = new File(path);
+            try
+            {
+                save = new File(path);
+            } catch (java.lang.NullPointerException e)
+            {
+                
+            }
         }
 
         // <editor-fold defaultstate="collapsed" desc="File IO Writing and Reading methods">

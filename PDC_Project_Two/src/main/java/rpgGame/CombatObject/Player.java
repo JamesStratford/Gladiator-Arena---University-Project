@@ -199,13 +199,14 @@ public class Player extends CombatObject
     /**
      * manage player inventory, assign weapons and armour to be equipt.
      */
-    public void manageInventory() throws IOException
+    public boolean manageInventory() throws IOException
     {
         Engine.get().getGUI().manageInventory();
         viewInventory();
         System.out.println("Enter the corresponding integer to equip / dequip the item.");
         boolean validInput = false;
         boolean back = false;
+        boolean mainMenu = false;
         while (!back)
         {
             int input = -1;
@@ -243,6 +244,9 @@ public class Player extends CombatObject
                             validInput = true;
                             back = true;
                             break;
+                        case 6:
+                            mainMenu = true;
+                            return mainMenu;
                     }
                 }
                 try
@@ -301,6 +305,7 @@ public class Player extends CombatObject
                 validInput = false;
             }
         }
+        return mainMenu;
     }
 
     /**
@@ -328,6 +333,7 @@ public class Player extends CombatObject
         System.out.println("4. Stamina");
         System.out.println("0. Back");
 
+        boolean mainMenu = false;
         boolean validInput = false;
         while (!validInput)
         {
@@ -355,6 +361,9 @@ public class Player extends CombatObject
                         break;
                     case 5:
                         return false;
+                    case 6:
+                        mainMenu = true;
+                        return mainMenu;
                     default:
                         System.out.println("Invalid option");
                         return false;
@@ -370,19 +379,23 @@ public class Player extends CombatObject
         }
         availableSkillPoints--;
 
-        return true;
+        return mainMenu;
     }
 
     /**
      * manage player skill point allocations
+     * @return if game is to go the main menu
+     * @throws java.lang.InterruptedException
+     * @throws java.io.IOException
      */
-    public void manageStats() throws InterruptedException, IOException
+    public boolean manageStats() throws InterruptedException, IOException
     {
         Engine.get().getGUI().manageStats();
         World.get().getButtonInputStream().clear();
         printStats();
         System.out.println("You have " + this.availableSkillPoints + " stat points available for allocation.");
 
+        boolean mainMenu = false;
         if (this.availableSkillPoints > 0)
         {
             System.out.println("Would you like to allocate them now?");
@@ -402,22 +415,28 @@ public class Player extends CombatObject
                             if (availableSkillPoints > 0)
                             {
                                 Engine.get().getGUI().allocStats();
-                                allocateStats();
+                                
+                                if (allocateStats())
+                                {
+                                    mainMenu = true;
+                                    return mainMenu;
+                                }
                                 Engine.get().getGUI().manageStats();
                                 printStats();
                                 System.out.println("You have " + this.availableSkillPoints + " stat points available for allocation.");
                                 System.out.println("Would you like to allocate them now?");
-                                System.out.println("1. Yes");
-                                System.out.println("2. Back");
                             }
                             break;
                         case 2:
                             // back
                             validInput = true;
                             break;
+                        case 6:
+                            mainMenu = true;
+                            return mainMenu;
                         default:
                             System.out.println("Invalid option");
-                            return;
+                            break;
                     }
                 }
                 Thread.sleep(50);
@@ -427,5 +446,7 @@ public class Player extends CombatObject
             System.out.println("Returning to menu");
             Thread.sleep(500);
         }
+        
+        return mainMenu;
     }
 }

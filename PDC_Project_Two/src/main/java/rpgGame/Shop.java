@@ -138,24 +138,20 @@ public class Shop
     {
         System.out.println("\"Welcome to Gondeliar\'s emporium!, for all your weapon and armour needs!\"");
         System.out.println("You have " + Player.get().getInventory().getCoins() + " coins.");
-        
-//        System.out.println("1. Buy");
-//        System.out.println("2. Sell");
-//        System.out.println("3. Back");
-//        System.out.println("4. Save and quit");
         System.out.println("What would you like to do?");
     }
     
     /**
-     *  player queried for buy options
+     * 
+     * @return if to return to the mainMenu
      */
-    private void queryBuyPanel()
+    private boolean queryBuyPanel()
     {
         Engine.get().getGUI().shopBuy();
+        boolean mainMenu = false;
         boolean validInput = false;
         while (!validInput)
         {
-//            int input = World.get().getScanner().nextInt();
             int input = -1;
             if (!World.get().getButtonInputStream().isEmpty())
             {
@@ -187,6 +183,9 @@ public class Shop
                             input = 0;
                             validInput = true;
                             break;
+                        case 6:
+                            mainMenu = true;
+                            return mainMenu;
                         default:
                             validInput = false;
                             break;
@@ -253,14 +252,17 @@ public class Shop
                 Logger.getLogger(Shop.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        return mainMenu;
     }
     
     /**
-     *  player queried for sell options
+     * 
+     * @return if game is to go to the main menu
      */
-    private void querySellPanel()
+    private boolean querySellPanel()
     {
         Engine.get().getGUI().shopSell();
+        boolean mainMenu = false;
         boolean validInput = false;
         while (!validInput)
         {
@@ -296,6 +298,9 @@ public class Shop
                         input = 0;
                         validInput = true;
                         break;
+                    case 6:
+                        mainMenu = true;
+                        return mainMenu;
                     default:
                         validInput = false;
                         break;
@@ -324,17 +329,21 @@ public class Shop
                 Logger.getLogger(Shop.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
+        return mainMenu;
     }
     
     /**
      *  entrance method to run shop
+     * @return if game is to go to mainMenu or not
      */
-    public void shopMain()
+    public boolean shopMain()
     {
         Engine.get().getGUI().shop();
         World.get().getButtonInputStream().clear();
         printShopEntry();
         
+        boolean mainMenu = false;
         boolean validInput = false;
         while (!validInput)
         {   
@@ -347,7 +356,11 @@ public class Shop
                         printAvailableItems();
                         //System.out.println("Enter '0' to cancel.");
                         // query buy
-                        queryBuyPanel();
+                        if (queryBuyPanel())
+                        {
+                            mainMenu = true;
+                            return mainMenu;
+                        }
                         validInput = true;
                         break;
                     case 2:
@@ -356,7 +369,13 @@ public class Shop
                         // query sell
                         //System.out.println("Enter '0' to cancel.");
                         if (Player.get().getInventory().getItems().size() > 0)
-                            querySellPanel();
+                        {
+                            if (querySellPanel())
+                            {
+                                mainMenu = true;
+                                return mainMenu;
+                            }
+                        }
                         else
                             System.out.println("You have no items to sell.");
                         validInput = true;
@@ -364,6 +383,9 @@ public class Shop
                     case 3:
                         validInput = true;
                         break;
+                    case 6:
+                        mainMenu = true;
+                        return mainMenu;
                 }
                 World.get().getButtonInputStream().clear();
             }
@@ -375,5 +397,7 @@ public class Shop
                 Logger.getLogger(Shop.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
+        return mainMenu;
     }
 }

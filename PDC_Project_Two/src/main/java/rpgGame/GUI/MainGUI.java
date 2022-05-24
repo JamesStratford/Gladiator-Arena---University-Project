@@ -5,12 +5,9 @@
  */
 package rpgGame.GUI;
 
-import java.awt.Graphics;
-import java.awt.Image;
 import utility.TextAreaOutputStream;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -18,10 +15,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import rpgGame.CombatObject.Player;
 import rpgGame.Engine;
 import rpgGame.World;
@@ -154,6 +148,7 @@ public class MainGUI extends javax.swing.JFrame
         else
         {
             loadGameFrame.setLatch(latch);
+            loadGameFrame.setList();
             loadGameFrame.setVisible(true);
         }
         try
@@ -168,9 +163,8 @@ public class MainGUI extends javax.swing.JFrame
     }
     
     public String getStringPrompt(String message)
-    {
-        String out = "";
-        out += (String) JOptionPane.showInputDialog(this, message);
+    {   
+        String out = JOptionPane.showInputDialog(this, message);
 
         return out;
     }
@@ -204,6 +198,12 @@ public class MainGUI extends javax.swing.JFrame
     
     public void mainMenu()
     {
+        jLabelPlayerHP.setVisible(false);
+        jLabelEnemyHP.setVisible(false);
+        jProgressBarPlayerHP.setVisible(false);
+        jProgressBarPlayerFatigue.setVisible(false);
+        jProgressBarEnemyHP.setVisible(false);
+        jProgressBarEnemyFatigue.setVisible(false);
         try
         {
             imagePanel.setImage(ImageIO.read(new File("./resources/gladiator_arena.jpg")));
@@ -432,7 +432,18 @@ public class MainGUI extends javax.swing.JFrame
     public int integerQuery()
     {
         int ret = 0;
-        ret = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter a number:"));
+        
+        try
+        {
+        String out = JOptionPane.showInputDialog(this, "Enter a number:");
+        if (out != null)
+        {
+            ret = Integer.parseInt(out);
+        }
+        } catch (java.lang.NumberFormatException e)
+        {
+            ret = 0;
+        }
         
         return ret;
     }

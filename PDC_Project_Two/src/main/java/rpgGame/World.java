@@ -2,7 +2,6 @@ package rpgGame;
 
 import rpgGame.Database.DataManager;
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rpgGame.CombatObject.Player;
@@ -41,6 +40,14 @@ public class World
             _instance = new World();
         }
         return _instance;
+    }
+    
+    /**
+     * Resets the World
+     */
+    public static void resetWorld()
+    {
+        _instance = null;
     }
     
     /**
@@ -102,30 +109,18 @@ public class World
                     {
                         case 1:
                             // player creation
-                            createPlayer();
-                            startGame();
-                            validInput = true;
+                            if (createPlayer())
+                            {
+                                startGame();
+                                validInput = true;
+                            }
                             break;
                         case 2:
-                            // load game via database
-//                            String playerName = Engine.get().getGUI().getStringPrompt("Enter player name:");
                             if (Engine.get().getGUI().loadGameDatabase())
                             {
                                 startGame();
                                 validInput = true;
                             }
-//                            if (!DataManager.get().loadGame(playerName))
-//                            {
-//                                System.out.println("Creating a new game...");
-//                                createPlayer();
-//                                startGame();
-//                            }
-//                            else
-//                            {
-//                                newGame = false;
-//                                startGame();
-//                            }
-//                            validInput = true;
                             break;
                         case 3:
                             quitGame = true;
@@ -229,17 +224,29 @@ public class World
                                     break;
                                 case 2:
                                     // enter shop
-                                    shop.shopMain();
+                                    if (shop.shopMain())
+                                    {
+                                        Engine.get().mainMenu();
+                                        quitGame = true;                                        
+                                    }
                                     validInput = true;
                                     break;
                                 case 3:
                                     // manage inventory
-                                    Player.get().manageInventory();
+                                    if (Player.get().manageInventory())
+                                    {
+                                        Engine.get().mainMenu();
+                                        quitGame = true;
+                                    }
                                     validInput = true;
                                     break;
                                 case 4:
                                     // view stats
-                                    Player.get().manageStats();
+                                    if (Player.get().manageStats())
+                                    {
+                                        Engine.get().mainMenu();
+                                        quitGame = true;
+                                    }
                                     validInput = true;
                                     break;
                                 case 5:
@@ -299,12 +306,16 @@ public class World
         return Engine.get().getGUI().getButtonInputs();
     }
     
-    public void createPlayer()
+    public boolean createPlayer()
     {
-        String playerName = "";
-        while (playerName.equals(""))
+        String playerName = null;
+        while (playerName == null || playerName.equals(""))
         {
             playerName = Engine.get().getGUI().getStringPrompt("Enter a name:");
+            if (playerName == null)
+            {
+                return false;
+            }
             if (playerName.equals(""))
             {
                 System.out.println("Please enter a name");
@@ -312,5 +323,6 @@ public class World
         }
         
         Player.set(new Player(playerName, 5, 5, 5, 5));
+        return true;
     }
 }
