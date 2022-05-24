@@ -1,7 +1,9 @@
 package rpgGame;
 
+import java.io.FileNotFoundException;
 import rpgGame.Database.DataManager;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rpgGame.CombatObject.Player;
@@ -93,8 +95,16 @@ public class World
     {
         Engine.get().getGUI().mainMenu();
         
-        
-        DataManager.get().initialiseItemData();
+        try
+        {
+            DataManager.get().initialiseItemData();
+        } catch (FileNotFoundException ex)
+        {
+            Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
+        }
         System.out.println("=====================================================================");
         System.out.println("                                               GLADIATOR GAME");
         System.out.println("=====================================================================");
