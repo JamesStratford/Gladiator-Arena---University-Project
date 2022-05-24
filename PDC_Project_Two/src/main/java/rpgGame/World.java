@@ -6,7 +6,6 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rpgGame.CombatObject.Player;
-import rpgGame.Database.rpgGameDatabase;
 import utility.ButtonInputQueue;
 
 /**
@@ -16,20 +15,16 @@ import utility.ButtonInputQueue;
 public class World
 {
     private static World _instance = null;
-    private rpgGameDatabase saveDB;
     private Player player;
     private Arena arena;
     private Shop shop;
-    private Scanner scanner;
     private boolean newGame;
     private boolean quitGame;
 
     public World()
     {
-        saveDB = new rpgGameDatabase();
         player = Player.get();
         arena = new Arena();
-        scanner = new Scanner(System.in);
 
         newGame = true;
         quitGame = false;
@@ -112,26 +107,40 @@ public class World
                             validInput = true;
                             break;
                         case 2:
-//                            if(!FileManager.get().loadGame())
-                            String playerName = Engine.get().getGUI().loadGamePrompt();
-                            if (!DataManager.get().loadGame(playerName))
+                            // load game via database
+//                            String playerName = Engine.get().getGUI().getStringPrompt("Enter player name:");
+                            if (Engine.get().getGUI().loadGameDatabase())
                             {
-                                System.out.println("Creating a new game...");
-                                createPlayer();
                                 startGame();
+                                validInput = true;
                             }
-                            else
-                            {
-                                newGame = false;
-                                startGame();
-                            }
-                            validInput = true;
+//                            if (!DataManager.get().loadGame(playerName))
+//                            {
+//                                System.out.println("Creating a new game...");
+//                                createPlayer();
+//                                startGame();
+//                            }
+//                            else
+//                            {
+//                                newGame = false;
+//                                startGame();
+//                            }
+//                            validInput = true;
                             break;
                         case 3:
                             quitGame = true;
                             validInput = true;
                             System.out.println("Quitting");
                             System.exit(0);
+                            break;
+                        case 6:
+                            // import save file
+                            String path = Engine.get().getGUI().getStringPrompt("Enter file path:");
+                            if (DataManager.get().importGame(path))
+                            {
+                                validInput = true;
+                                startGame();
+                            }
                             break;
                         default:
                             System.out.println("Invalid option");
@@ -228,17 +237,24 @@ public class World
                                     Player.get().manageStats();
                                     validInput = true;
                                     break;
-                                case 5:
-                                    // save game and quit
-                                    Engine.get().shutdown();
-                                    validInput = true;
+                                case 6:
+                                    // export save
+                                    String path = Engine.get().getGUI().getStringPrompt("Enter file path:");
+                                    if (DataManager.get().exportGame(path))
+                                    {
+                                        validInput = true;
+                                        System.out.println("Successfully exported save file.");
+                                    } else
+                                    {
+                                        System.out.println("Unable to export save file.");
+                                    }
                                     break;
                                 default:
                                     System.out.println("Invalid option");
                                     getButtonInputStream().clear();
                                     break;
                             }
-                            World.get().getButtonInputStream().clear();
+                            getButtonInputStream().clear();
                         }
                         Thread.sleep(20);
                     }
@@ -266,14 +282,6 @@ public class World
             }
         }
     }
-
-    /**
-     * @return the scanner
-     */
-    public Scanner getScanner()
-    {
-        return scanner;
-    }
     
     public ButtonInputQueue getButtonInputStream()
     {
@@ -285,7 +293,7 @@ public class World
         String playerName = "";
         while (playerName.equals(""))
         {
-            playerName = Engine.get().getGUI().createPlayer();
+            playerName = Engine.get().getGUI().getStringPrompt("Enter a name:");
             if (playerName.equals(""))
             {
                 System.out.println("Please enter a name");

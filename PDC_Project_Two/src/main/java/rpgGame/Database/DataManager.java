@@ -40,11 +40,17 @@ public class DataManager
     /**
     *   @returns _instance
     */
-    public static DataManager get() throws IOException
+    public static DataManager get()
     {
         if (_instance == null)
         {
-            _instance = new DataManager();
+            try
+            {
+                _instance = new DataManager();
+            } catch (IOException ex)
+            {
+                Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         return _instance;
@@ -63,15 +69,34 @@ public class DataManager
     {
         return saveGame.loadGameFromDatabase(playerName);
     }
+    
+    /**
+     * Wrapper for private class importGame method.
+     * @return 
+     */
+    public boolean importGame(String path)
+    {
+        return saveGame.importGame(path);
+    }
+    
+    /**
+     * Wrapper for private class exportGame method.
+     * @return 
+     */
+    public boolean exportGame(String path)
+    {
+        return saveGame.exportGame(path);
+    }
 
     /**
-    *   loads savefile
-     * @throws java.io.IOException
-    */
-    public boolean loadGame() throws IOException
+     * Deletes a character from embedded database.
+     * @param name 
+     */
+    public void deleteGame(String name)
     {
-        return saveGame.loadGame();
+        saveGame.deleteGame(name);
     }
+
     
     /**
     *   begins auto-save thread.
@@ -165,12 +190,33 @@ public class DataManager
         }
     }
     
+    public ArrayList<String> getSaveFilesAsString()
+    {
+        ArrayList<String> ret = new ArrayList<>();
+        try
+        {
+            Statement statement = MainDatabase.get().getConnection().createStatement();
+            ResultSet rs = statement.executeQuery("SELECT name FROM GameSave");
+            
+            while (rs.next())
+            {
+                ret.add(rs.getString("name"));
+            }
+            
+            return ret;
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
     /**
     *   Inner class managing all savefile functionality.
     */
     private class SaveGame implements Runnable
     {
-        private final File save;
+        private File save;
         private Player player;
         private BufferedReader reader;
         private BufferedWriter writer;
@@ -181,7 +227,17 @@ public class DataManager
             save = new File("./resources/savegame.txt");
             save.setReadable(true);
         }
+        
+        /**
+         * Sets path of desired save file to be used for importing and exporting save files.
+         * @param path 
+         */
+        public void setSaveFilePath(String path)
+        {
+            save = new File(path);
+        }
 
+        // <editor-fold defaultstate="collapsed" desc="File IO Writing and Reading methods">
         /*
         *   manages savefile write functions
         */
@@ -195,7 +251,6 @@ public class DataManager
             writePlayerInventorySave();
 
             writer.close();
-            //save.setWritable(false);
             return true;
         }
         
@@ -342,19 +397,30 @@ public class DataManager
             reader.close();
             return null;
         }
+        // </editor-fold>
 
-        /*
-        *   loads data from savefile and assigns Player._instance as the returned Player object.
-        */
-        public boolean loadGame() throws IOException
+        /**
+         * Load save game via text file.
+         * @return
+         * @throws IOException 
+         */
+        public boolean importGame(String path)
         {
+            setSaveFilePath(path);
             if (save.exists())
             {
-                Player.set(readInPlayerData());
+                try
+                {
+                    Player.set(readInPlayerData());
                 player = Player.get();
                 System.out.println("Welcome back " + player.getName());
 
                 return true;
+                } catch (IOException ex)
+                {
+                    Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, ex);
+                    return false;
+                }
             }
             else
             {
@@ -363,22 +429,52 @@ public class DataManager
             }
         }
 
-        /*
-        *   saves the games data into savefile.
-        */
-        synchronized public boolean saveGame() throws IOException
+        /**
+         * Export save file to path currently set.
+         * @return 
+         */
+        public boolean exportGame(String path)
         {
-//            writeOutPlayerData();
-            saveToDatabase();
-            return true;
+            try
+            {
+                setSaveFilePath(path);
+                return writeOutPlayerData();
+                    } catch (IOException ex)
+            {
+                Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
+            }
+        }
+        
+        public void deleteGame(String name)
+        {
+            try
+            {
+                Statement statement = MainDatabase.get().getConnection().createStatement();
+                statement.execute("DELETE FROM GameSave WHERE name = " + "\'"+name+"\'");
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        /**
+         * Wrapper function which saves the game.
+         * @return 
+         */
+        synchronized public boolean saveGame()
+        {
+            return saveToDatabase();
         }
         
         /**
          * Method to save player stats to the embedded database as an
          * alternative to fileIO
          */
-        public void saveToDatabase()
+        public boolean saveToDatabase()
         {
+            boolean success = true;
+            
             String name = Player.get().getName();
             int level = Player.get().getLevel();
             int xp = Player.get().getXp();
@@ -438,7 +534,7 @@ public class DataManager
             
             try
             {
-                Statement statement = rpgGameDatabase.get().getConnection().createStatement();
+                Statement statement = MainDatabase.get().getConnection().createStatement();
                 if (statement.executeQuery("SELECT name FROM GameSave WHERE name = \'" + name+"\'").next())
                 {
                     statement.executeUpdate("UPDATE GameSave "
@@ -461,14 +557,17 @@ public class DataManager
             } catch (SQLException ex)
             {
                 Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, ex);
+                success = false;
             }
+            
+            return success;
         }
         
         public boolean loadGameFromDatabase(String playerName)
         {
             try
             {
-                Statement statement = rpgGameDatabase.get().getConnection().createStatement();
+                Statement statement = MainDatabase.get().getConnection().createStatement();
                 ResultSet rs = statement.executeQuery("SELECT name, level, xp, xpToLevelUp, availableSkillPoints, "
                         + "strength, dexterity, vitality, stamina, coins, inventory, equiptWeapon, equiptArmour FROM GameSave "
                         + "WHERE name = '" + playerName + "'");

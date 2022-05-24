@@ -6,27 +6,22 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import rpgGame.CombatObject.Player;
 
 /**
  *
  * @author James Stratford 21129223
  */
-public class rpgGameDatabase
+public class MainDatabase
 {
-    private static rpgGameDatabase _instance = null;
+    private static MainDatabase _instance = null;
     private Connection conn = null;
-//    private String url = "jdbc:derby:RPGGameDB;create=true";
-    private String url = "jdbc:derby://localhost:1527/RPGGameDB;create=true";
+    private String url = "jdbc:derby:RPGGameDB;create=true";
+//    private String url = "jdbc:derby://localhost:1527/RPGGameDB;create=true";
 
     private String dbusername = "main";
     private String dbpassword = "main";
     
-    public rpgGameDatabase()
+    public MainDatabase()
     {
         dbsetup();
     }
@@ -36,10 +31,10 @@ public class rpgGameDatabase
         return conn;
     }
     
-    public static rpgGameDatabase get()
+    public static MainDatabase get()
     {
         if (_instance == null)
-            _instance = new rpgGameDatabase();
+            _instance = new MainDatabase();
         
         return _instance;
     }

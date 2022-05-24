@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -33,6 +34,7 @@ import utility.ButtonInputQueue;
 public class MainGUI extends javax.swing.JFrame
 {
     private ButtonInputQueue buttonInputs;
+    private LoadGameFrame loadGameFrame;
     
     /**
      * Creates new form mainGUI
@@ -70,7 +72,7 @@ public class MainGUI extends javax.swing.JFrame
         // ---------------------------------------------------------
         
         buttonInputs = new ButtonInputQueue();
-        
+        setLocationRelativeTo(null);
         // Please open below code fold to see button action listener implementation.
         // <editor-fold defaultstate="collapsed" desc="Button action listeners"> 
         jButtonOptionOne.addActionListener(new ActionListener()
@@ -142,14 +144,33 @@ public class MainGUI extends javax.swing.JFrame
             }
         });
         // </editor-fold>
-        
-        
     }
     
-    public String loadGamePrompt()
+    public boolean loadGameDatabase()
+    {
+        CountDownLatch latch = new CountDownLatch(1);
+        if (loadGameFrame == null)
+            loadGameFrame = new LoadGameFrame(latch);
+        else
+        {
+            loadGameFrame.setLatch(latch);
+            loadGameFrame.setVisible(true);
+        }
+        try
+        {
+            latch.await();
+        } catch (InterruptedException ex)
+        {
+            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return loadGameFrame.getSuccess();
+    }
+    
+    public String getStringPrompt(String message)
     {
         String out = "";
-        out += (String) JOptionPane.showInputDialog(this, "Enter a name");
+        out += (String) JOptionPane.showInputDialog(this, message);
 
         return out;
     }
@@ -200,7 +221,8 @@ public class MainGUI extends javax.swing.JFrame
         jButtonOptionThree.setVisible(false);
         jButtonOptionFour.setVisible(false);
         jButtonOptionFive.setVisible(false);
-        jButtonOptionSix.setVisible(false);
+        jButtonOptionSix.setVisible(true);
+        jButtonOptionSix.setText("<html>Import Save<html>");
     }
     
     public void townCenter()
@@ -232,7 +254,9 @@ public class MainGUI extends javax.swing.JFrame
         jButtonOptionFour.setText("<html>Manage stats and assign skill points<html>");
         
         jButtonOptionFive.setVisible(false);
-        jButtonOptionSix.setVisible(false);
+        
+        jButtonOptionSix.setVisible(true);
+        jButtonOptionSix.setText("<html>Export Save<html>");
     }
     
     public void arena()
@@ -391,25 +415,11 @@ public class MainGUI extends javax.swing.JFrame
         jButtonOptionSix.setVisible(false);
     }
     
-    public String createPlayer()
-    {
-        String out = "";
-        out += (String)JOptionPane.showInputDialog(this, "Enter a name");
-        
-        return out;
-    }
-    
     public int integerQuery()
     {
         int ret = 0;
-
-        try
-        {
-            ret = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter a message"));
-        } catch (Exception e)
-        {
-//            System.out.println("Please enter an integer");
-        }
+        ret = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter a number:"));
+        
         return ret;
     }
     
