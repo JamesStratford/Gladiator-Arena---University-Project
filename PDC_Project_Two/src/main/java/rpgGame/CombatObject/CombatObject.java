@@ -43,6 +43,7 @@ public abstract class CombatObject implements CombatObjectADT
     /**
      * @return the healthPoints
      */
+    @Override
     public int getHealthPoints()
     {
         return healthPoints;
@@ -52,6 +53,7 @@ public abstract class CombatObject implements CombatObjectADT
      * 
      * @return max HP
      */
+    @Override
     public int getMaxHealthPoints()
     {
         return maxHP;
@@ -60,6 +62,7 @@ public abstract class CombatObject implements CombatObjectADT
     /**
      * @return the fatiguePoints
      */
+    @Override
     public int getFatiguePoints()
     {
         return fatiguePoints;
@@ -69,6 +72,7 @@ public abstract class CombatObject implements CombatObjectADT
      * 
      * @return max fatigue
      */
+    @Override
     public int getMaxFatiguePoints()
     {
         return maxFatiguePoints;
@@ -77,6 +81,7 @@ public abstract class CombatObject implements CombatObjectADT
     /**
      *  resets hp and fatigue after a battle.
      */
+    @Override
     public void resetHealthResources()
     {
         this.healthPoints = maxHP;
@@ -88,32 +93,18 @@ public abstract class CombatObject implements CombatObjectADT
      * 
      * @return alive
      */
+    @Override
     public boolean getAlive()
     {
         return alive;
     }
     
-    /**
-     *  Inner class holding stat information
-     */
-    protected class Stats
-    {
-        protected int strength;
-        protected int dexterity;
-        protected int vitality;
-        protected int stamina;
-        
-        @Override
-        public String toString()
-        {
-            return this.strength + " strength,\n" + this.dexterity + " dexterity,\n" + this.vitality + " vitality,\n" + this.stamina + " stamina.";
-        }
-    }
     
     /**
      * 
      * @return strength
      */
+    @Override
     public int getStrength()
     {
         return this.stats.strength;
@@ -123,6 +114,7 @@ public abstract class CombatObject implements CombatObjectADT
      * 
      * @return dexterity
      */
+    @Override
     public int getDexterity()
     {
         return this.stats.dexterity;
@@ -132,6 +124,7 @@ public abstract class CombatObject implements CombatObjectADT
      * 
      * @return vitality
      */
+    @Override
     public int getVitality()
     {
         return this.stats.vitality;
@@ -141,6 +134,7 @@ public abstract class CombatObject implements CombatObjectADT
      * 
      * @return stamina
      */
+    @Override
     public int getStamina()
     {
         return this.stats.stamina;
@@ -148,17 +142,9 @@ public abstract class CombatObject implements CombatObjectADT
     
     /**
      * 
-     * @return stats.toString()
-     */
-    public String getStatsString()
-    {
-        return this.stats.toString();
-    }
-    
-    /**
-     * 
      * @return coins
      */
+    @Override
     public int getCoins()
     {
         return this.inventory.getCoins();
@@ -168,6 +154,7 @@ public abstract class CombatObject implements CombatObjectADT
      * 
      * @return inventory
      */
+    @Override
     public Inventory getInventory()
     {
         return this.inventory;
@@ -177,6 +164,7 @@ public abstract class CombatObject implements CombatObjectADT
      * 
      * @return wieldedWeapon
      */
+    @Override
     public Weapon getWieldedWeapon()
     {
         return this.wieldedWeapon;
@@ -186,6 +174,7 @@ public abstract class CombatObject implements CombatObjectADT
      * 
      * @param wieldedWeapon 
      */
+    @Override
     public void setWieldedWeapon(Weapon wieldedWeapon)
     {
         this.wieldedWeapon = wieldedWeapon;
@@ -195,6 +184,7 @@ public abstract class CombatObject implements CombatObjectADT
      * 
      * @return wieldedArmour
      */
+    @Override
     public Armour getWieldedArmour()
     {
         return this.wieldedArmour;
@@ -204,6 +194,7 @@ public abstract class CombatObject implements CombatObjectADT
      * 
      * @param wieldedArmour 
      */
+    @Override
     public void setWieldedArmour(Armour wieldedArmour)
     {
         this.wieldedArmour = wieldedArmour;
@@ -213,6 +204,7 @@ public abstract class CombatObject implements CombatObjectADT
      *  attacks target - used for both player and enemy subclasses
      * @param target 
      */
+    @Override
     public void attack(CombatObject target)
     {
         //System.out.println("DEBUG: Attacking");
@@ -273,6 +265,7 @@ public abstract class CombatObject implements CombatObjectADT
     /**
      *  dodge option
      */
+    @Override
     public void dodge()
     {
         if (getFatiguePoints() > 10)
@@ -295,6 +288,7 @@ public abstract class CombatObject implements CombatObjectADT
     /**
      *  rest / forced-rest option
      */
+    @Override
     public void rest()
     {
         fatiguePoints += 15;
@@ -303,6 +297,7 @@ public abstract class CombatObject implements CombatObjectADT
     /**
      *  prints inventory, coins, and carry weight
      */
+    @Override
     public void viewInventory()
     {
         System.out.println("Carry weight: " + this.inventory.getWeightCapacityString());
@@ -326,5 +321,31 @@ public abstract class CombatObject implements CombatObjectADT
         System.out.println("Equipt weapon: " + this.wieldedWeapon);
         System.out.println("Equipt armour: " + this.wieldedArmour);
         System.out.println();
+    }
+    
+    /**
+     * 
+     * @return stats.toString()
+     */
+    public String getStatsString()
+    {
+        return this.stats.toString();
+    }
+    
+    /**
+     *  Inner class holding stat information
+     */
+    protected class Stats
+    {
+        protected int strength;
+        protected int dexterity;
+        protected int vitality;
+        protected int stamina;
+        
+        @Override
+        public String toString()
+        {
+            return this.strength + " strength,\n" + this.dexterity + " dexterity,\n" + this.vitality + " vitality,\n" + this.stamina + " stamina.";
+        }
     }
 }
