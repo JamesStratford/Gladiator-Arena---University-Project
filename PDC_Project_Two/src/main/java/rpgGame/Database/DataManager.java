@@ -281,7 +281,11 @@ public class DataManager
         }
     }
     
-    public ArrayList<String> getSaveFilesAsString()
+    /**
+     * For use with the LoadGameFrame.
+     * @return Returns an ArrayList of Strings that has all game save character names
+     */
+    public ArrayList<String> getSaveFilesAsArrayListOfStrings()
     {
         ArrayList<String> ret = new ArrayList<>();
         try

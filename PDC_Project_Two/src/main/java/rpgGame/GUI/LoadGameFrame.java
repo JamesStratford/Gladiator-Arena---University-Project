@@ -226,7 +226,7 @@ public class LoadGameFrame extends javax.swing.JFrame
     public void setList()
     {
         dm.clear();
-        ArrayList<String> saves = DataManager.get().getSaveFilesAsString();
+        ArrayList<String> saves = DataManager.get().getSaveFilesAsArrayListOfStrings();
         
         for (int i = 0; i < saves.size(); i++)
         {

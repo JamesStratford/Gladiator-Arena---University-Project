@@ -17,8 +17,8 @@ public class MainDatabase
 {
     private static MainDatabase _instance = null;
     private Connection conn = null;
-//    private String url = "jdbc:derby:RPGGameDB;create=true";
-    private String url = "jdbc:derby://localhost:1527/RPGGameDB;create=true";
+    private String url = "jdbc:derby:RPGGameDB;create=true";
+//    private String url = "jdbc:derby://localhost:1527/RPGGameDB;create=true";
 
     private String dbusername = "main";
     private String dbpassword = "main";
