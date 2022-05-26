@@ -8,7 +8,7 @@ import rpgGame.Items.Weapon;
  *
  * @author James Stratford 21129223
  */
-public abstract class CombatObject
+public abstract class CombatObject implements CombatObjectADT
 {
     protected int healthPoints;
     protected int fatiguePoints;

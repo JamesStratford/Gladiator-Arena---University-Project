@@ -17,7 +17,7 @@ public class World
 {
     private static World _instance = null;
     private Player player;
-    private Arena arena;
+    private final Arena arena;
     private Shop shop;
     private boolean newGame;
     private boolean quitGame;
@@ -98,10 +98,7 @@ public class World
         try
         {
             DataManager.get().initialiseItemData();
-        } catch (FileNotFoundException ex)
-        {
-            Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex)
+        } catch (FileNotFoundException | SQLException ex)
         {
             Logger.getLogger(World.class.getName()).log(Level.SEVERE, null, ex);
         }
