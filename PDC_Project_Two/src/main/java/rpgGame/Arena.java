@@ -12,9 +12,20 @@ import rpgGame.CombatObject.Player;
  */
 public class Arena
 {
+    private static Arena _instance = null;
     private Enemy enemy;
     private Player player;
     private boolean exit;
+    
+    public static Arena get()
+    {
+        if (_instance == null)
+        {
+            _instance = new Arena();
+        }
+        
+        return _instance;
+    }
     
     /**
      *  entrance method to run arena
@@ -24,12 +35,12 @@ public class Arena
     public boolean arenaMain() throws InterruptedException
     {
         World.get().getButtonInputStream().clear();
+        enemy = Enemy.generateRandomEnemy();
+        player = Player.get();
         Engine.get().getGUI().setHpBars();
         Engine.get().getGUI().arena();
         exit = false;
         
-        enemy = Enemy.generateRandomEnemy();
-        player = Player.get();
         printArenaWelcome();
         
         System.out.println(enemy.toString()  + " HP: "  + enemy.getHealthPoints() + " Fatigue: " 

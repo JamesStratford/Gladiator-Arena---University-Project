@@ -25,7 +25,7 @@ public class World
     public World()
     {
         player = Player.get();
-        arena = new Arena();
+        arena = Arena.get();
 
         newGame = true;
         quitGame = false;
@@ -49,7 +49,7 @@ public class World
      */
     public static void resetWorld()
     {
-        _instance = null;
+        _instance = new World();
     }
     
     /**
@@ -262,7 +262,6 @@ public class World
                                     if (DataManager.get().exportGame(path))
                                     {
                                         validInput = true;
-                                        System.out.println("Successfully exported save file.");
                                     } else
                                     {
                                         System.out.println("Unable to export save file.");
@@ -291,6 +290,7 @@ public class World
                 System.out.println("Game over man! Game over!");
                 System.out.println("Slain enemies:");
                 System.out.println(player.getDefeatedEnemies());
+                Engine.get().mainMenu();
                 quitGame = true;
                 try
                 {

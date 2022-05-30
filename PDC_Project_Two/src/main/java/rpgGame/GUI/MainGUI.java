@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
+import rpgGame.Arena;
 import rpgGame.CombatObject.Player;
 import rpgGame.Engine;
 import rpgGame.World;
@@ -189,10 +190,10 @@ public class MainGUI extends javax.swing.JFrame
         
         if (World.get().getArena().getEnemy() != null)
         {
-            jProgressBarEnemyHP.setMaximum(World.get().getArena().getEnemy().getMaxHealthPoints());
-            jProgressBarEnemyFatigue.setMaximum(World.get().getArena().getEnemy().getMaxFatiguePoints());
-            jProgressBarEnemyHP.setValue(World.get().getArena().getEnemy().getHealthPoints());
-            jProgressBarEnemyFatigue.setValue(World.get().getArena().getEnemy().getFatiguePoints());
+            jProgressBarEnemyHP.setMaximum(Arena.get().getEnemy().getMaxHealthPoints());
+            jProgressBarEnemyFatigue.setMaximum(Arena.get().getEnemy().getMaxFatiguePoints());
+            jProgressBarEnemyHP.setValue(Arena.get().getEnemy().getHealthPoints());
+            jProgressBarEnemyFatigue.setValue(Arena.get().getEnemy().getFatiguePoints());
         }
     }
     

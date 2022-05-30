@@ -507,27 +507,30 @@ public class DataManager
          */
         public boolean importGame(String path)
         {
-            setSaveFilePath(path);
-            if (save.exists())
+            if (path != null && !path.equals(""))
             {
-                try
+                setSaveFilePath(path);
+                if (save.exists())
                 {
-                    Player.set(readInPlayerData());
-                player = Player.get();
-                System.out.println("Welcome back " + player.getName());
+                    try
+                    {
+                        Player.set(readInPlayerData());
+                        player = Player.get();
+                        System.out.println("Welcome back " + player.getName());
 
-                return true;
-                } catch (IOException ex)
+                        return true;
+                    } catch (IOException ex)
+                    {
+                        Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, ex);
+                        return false;
+                    }
+                } else
                 {
-                    Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("Can't find savefile");
                     return false;
                 }
             }
-            else
-            {
-                System.out.println("Can't find savefile");
-                return false;
-            }
+            return false;
         }
 
         /**
@@ -538,13 +541,17 @@ public class DataManager
         {
             try
             {
-                setSaveFilePath(path);
-                return writeOutPlayerData();
-                    } catch (IOException ex)
+                if (path != null && !path.equals(""))
+                {
+                    setSaveFilePath(path);
+                    return writeOutPlayerData();
+                }
+
+            } catch (IOException ex)
             {
                 Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, ex);
-                return false;
             }
+            return false;
         }
         
         public void deleteGame(String name)
